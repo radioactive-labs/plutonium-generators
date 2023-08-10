@@ -12,7 +12,7 @@ module Pu
       # class_option :graphql_schema, type: :string, default: nil
       # class_option :graphql_queries, type: :boolean, default: false
       class_option :models, type: :boolean, default: true
-      class_option :lint, type: :boolean, default: true, desc: 'Run linters for generated assets'
+      class_option :lint, type: :boolean, default: false, desc: 'Run linters for generated assets'
 
       desc "Runs spec generators for the entire project\n\n" \
            "Models:\n" \

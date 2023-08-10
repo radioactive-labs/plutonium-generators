@@ -35,7 +35,7 @@ module Pu
       class_option :spec, type: :boolean, default: true
       class_option :force_external_spec, type: :boolean, default: false,
                                   desc: 'Force the generation of a spec for models in libraries/gems.'
-      class_option :lint, type: :boolean, default: true, desc: 'Lint generated factories'
+      class_option :lint, type: :boolean, default: false, desc: 'Lint generated factories'
 
       def start
         setup
