@@ -9,20 +9,28 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'plutonium_generators'
+group :development do
+  gem 'plutonium_generators', github: 'plutonium-rails/plutonium-generators', branch: :master
+end
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
+<!-- Or install it yourself as:
 
-    $ gem install plutonium_generators
+    $ gem install plutonium_generators -->
 
 ## Usage
 
 TODO: Write usage instructions here
+
+```bash
+rails g pu:spec:install # setup dependencies
+rails g pu:spec:model Model # generate specs & factories for a moodel
+rails g pu:spec:all # generate specs & factories for all moodel
+```
 
 ## Development
 
@@ -33,7 +41,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/plutonium_generators.
-
 
 ## License
 
