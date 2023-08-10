@@ -1,0 +1,33 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+module Queries
+  RSpec.describe <%= resolver_name %>, type: :request do
+    describe 'valid request' do
+      it 'returns the expected result' do
+        response = gql(query:, variables:, operation:, current_user:)
+        expect(response).not_to be_an_error_response
+        expect(response[operation]).not_to be_an_empty_response
+      end
+
+      # Add more test cases as needed
+    end
+
+    def operation
+      :<%= name %>
+    end
+
+    def variables
+      {}
+    end
+
+    def query
+      <<~GQL
+        query <%= name %> {
+<%= @query.to_graphql(4) %>
+        }
+      GQL
+    end
+  end
+end

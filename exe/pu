@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative File.expand_path("../lib/plutonium_generators/cli", __dir__)
+
+PlutoniumGenerators::CLI.start(ARGV)

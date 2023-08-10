@@ -1,0 +1,33 @@
+# frozen_string_literal: true
+
+# This file is generate automatically
+# Do not modify it by hand
+# Add your customizations to `<%= model_class_underscored %>.rb` instead
+RSpec.shared_examples 'Automatically Generated <%= model_class_name %> Examples' do
+  it 'is valid with valid attributes' do
+    expect(subject).to be_valid
+  end
+
+  describe 'validations' do
+  <%- attribute_validations.each do |validation| -%>
+    <%= validation %>
+  <%- end -%>
+  end
+
+  describe 'associations' do
+    # belongs_to
+  <%- belongs_to_validations.each do |validation| -%>
+    <%= validation %>
+  <%- end -%>
+
+    # has_one
+  <%- has_one_validations.each do |validation| -%>
+    <%= validation %>
+  <%- end -%>
+
+    # has_many
+  <%- has_many_validations.each do |validation| -%>
+    <%= validation %>
+  <%- end -%>
+  end
+end

@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+require 'models/<%= model_class_underscored %>_spec.auto'
+
+RSpec.describe <%= model_class_name %>, type: :model do
+  include_examples 'Automatically Generated <%= model_class_name %> Examples'
+
+  subject { build :<%= model_class_underscored %> }
+
+  # Add your custom examples here
+end

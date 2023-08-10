@@ -1,0 +1,74 @@
+# frozen_string_literal: true
+
+# This file is generate automatically
+# Do not modify it by hand
+# Add your customizations to `<%= model_class_underscored %>.rb` instead
+FactoryBot.define do
+  ### base factory
+  factory :<%= model_class_underscored %>, class: <%= model_class_name %> do
+    ## required attributes
+  <%- required_model_attributes.each do |name, params| -%>
+    <%= attribute_factory name, params %>
+    <%- if required_model_attributes.keys.last == name -%>
+
+    <%- end -%>
+  <%- end -%>
+    ## optional attributes
+  <%- optional_model_attributes.each do |name, params| -%>
+    <%= noop_attribute_factory name, params %>
+    <%- if optional_model_attributes.keys.last == name -%>
+
+    <%- end -%>
+  <%- end -%>
+    ## required associations
+  <%- required_belongs_to.each do |name, params| -%>
+    with_<%= name %>
+  <%- end -%>
+  <%- required_has_one.each do |name, params| -%>
+    with_<%= name %>
+  <%- end -%>
+
+    ## belongs_to traits
+  <%- belongs_to.each do |name, params| -%>
+    trait :with_<%= name %> do
+      association :<%= name %>, factory: :<%= safely_underscore params[:association].class_name %>
+    end
+
+  <%- end -%>
+    ## has_one traits
+  <%- has_one.each do |name, params| -%>
+    trait :with_<%= name %> do
+      association :<%= name %>, factory: :<%= safely_underscore params[:association].class_name %>
+    end
+
+  <%- end -%>
+    ## has_many traits
+    transient do
+  <%- has_many.each do |name, params| -%>
+      <%= name %>_count { 1 }
+  <%- end -%>
+    end
+
+  <%- has_many.each do |name, params| -%>
+    trait :with_<%= name %> do
+      <%= name %> do
+        Array.new(<%= name %>_count) { association(:<%= safely_underscore params[:association].class_name %>) }
+      end
+    end
+
+  <%- end -%>
+    ## creates an instance with all the bells and whistles
+    trait :complete do
+    <%- optional_belongs_to.each do |name, params| -%>
+      <%- next unless params[:association].options[:optional] -%>
+      with_<%= name %>
+    <%- end -%>
+    <%- optional_has_one.each do |name, params| -%>
+      with_<%= name %>
+    <%- end -%>
+    <%- has_many.each do |name, params| -%>
+      with_<%= name %>
+    <%- end -%>
+    end
+  end
+end
