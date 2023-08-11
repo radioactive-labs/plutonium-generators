@@ -25,7 +25,7 @@ module Pu
       rescue StandardError => e
         exception 'Specs generation failed:', e
       end
-      
+
       private
 
       def lint_models
@@ -39,11 +39,11 @@ module Pu
           )
         end
       end
-      
+
       def validate_schema
         @schema_class = PlutoniumGenerators::Graphql::Parser.parse options[:graphql_schema].classify.constantize
       end
-      
+
       def generate_query_specs
         validate_schema
         schema_class[:queries].each_key do |query|

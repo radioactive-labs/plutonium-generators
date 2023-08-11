@@ -30,7 +30,7 @@ module Concerns
       {
         association.name =>
         {
-          association: association
+          association:
         }
       }
     end

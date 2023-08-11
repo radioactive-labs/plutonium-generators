@@ -6,7 +6,7 @@ module Pu
   module Specs
     class QueryGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
-      
+
       source_root File.expand_path('templates', __dir__)
 
       InvalidQueryError = Class.new(StandardError)

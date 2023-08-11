@@ -45,8 +45,8 @@ module Concerns
 
       {
         attribute_name_key => {
-          column: column,
-          validators: validators
+          column:,
+          validators:
         }
       }
     end
