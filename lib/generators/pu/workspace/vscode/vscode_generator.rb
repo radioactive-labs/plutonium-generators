@@ -28,9 +28,7 @@ module Pu
           copy_file file, file
         end
 
-        template '.ruby-version.erb', '.ruby-version', force: true
-        replace_in_file 'Gemfile', /^ruby ["']+.*["']+/, "ruby '~> #{ruby_version}'"
-
+        set_ruby_version!
         add_gem 'solargraph', group: :development
         add_gem 'htmlbeautifier', group: :development
       end
