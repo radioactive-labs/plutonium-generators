@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://google.com'
   spec.license       = 'MIT'
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.7.1')
+  spec.required_ruby_version = Gem::Requirement.new('~>  3.2.2')
 
   spec.metadata['allowed_push_host'] = 'http://rubygems.org'
 

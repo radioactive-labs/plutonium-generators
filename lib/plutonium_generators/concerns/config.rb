@@ -17,7 +17,7 @@ module PlutoniumGenerators
 
       def config
         @config ||= if File.exist? config_file
-                      YAML.load_file(config_file)
+                      YAML.load_file(config_file) || {}
                     else
                       {}
                     end

@@ -20,7 +20,7 @@ module Pu
       protected
 
       def install_v0_1_0!
-        add_gem 'factory_bot-awesome_linter'
+        add_gem 'factory_bot-awesome_linter', group: :development
         copy_file 'lib/tasks/factory_bot.rake', 'lib/tasks/factory_bot.rake'
       end
     end
