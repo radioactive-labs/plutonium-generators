@@ -6,6 +6,7 @@
     "kaiwood.endwise",
     "castwide.solargraph",
     "aliariff.vscode-erb-beautify",
-    "jbockle.jbockle-format-files"
+    "jbockle.jbockle-format-files",
+    "esbenp.prettier-vscode"
   ]
 }

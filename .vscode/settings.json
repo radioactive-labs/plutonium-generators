@@ -5,7 +5,6 @@
   "editor.semanticHighlighting.enabled": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  // "editor.stickyScroll.enabled": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
@@ -15,7 +14,7 @@
   ],
   "solargraph.formatting": true,
   "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "[ruby]": {
@@ -27,6 +26,7 @@
     "editor.formatOnSave": false
   },
   "files.associations": {
-    "*.html.erb": "erb"
+    "*.html.erb": "erb",
+    "Gemfile": "ruby",
   }
 }
