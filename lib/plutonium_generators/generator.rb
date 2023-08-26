@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'semantic_range'
+
 require File.join(__dir__, 'concerns/config.rb')
 require File.join(__dir__, 'concerns/logger.rb')
 require File.join(__dir__, 'concerns/serializer.rb')
@@ -28,6 +30,13 @@ module PlutoniumGenerators
 
     def app_name
       appname.underscore
+    end
+
+    def pug_installed?(feature, version: nil)
+      installed_version = read_config(:installed, feature)
+      return false unless installed_version.present?
+
+      version.present? ? SemanticRange.satisfies?(installed_version, ">=#{version}") : true
     end
   end
 end

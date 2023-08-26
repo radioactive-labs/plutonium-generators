@@ -11,9 +11,11 @@ module PlutoniumGenerators
       base.send :class_option, :interactive, type: :boolean, desc: 'Show prompts. Default: true'
       base.send :class_option, :bundle, type: :boolean, desc: 'Run bundle after setup. Default: true'
       base.send :class_option, :lint, type: :boolean, desc: 'Run linter after generation. Default: false'
-      base.send :class_option, :pug, type: :numeric, default: 0,
-                                     desc: 'Used internally by plutonium generators. ' \
+      base.send :class_option, :pug_id, type: :numeric, default: 0,
+                                        desc: 'Used internally by plutonium generators. ' \
                                          'Do not set this value as it might lead to unspecified behaviour.'
+      base.send :class_option, :force, type: :boolean, default: false,
+                                       desc: 'Force installation even if it have been previously installed.'
     end
 
     protected
@@ -25,7 +27,9 @@ module PlutoniumGenerators
       versions = methods.map do |m|
         m.to_s.match(/install_v([\d_]+)/)&.[](1)&.gsub('_', '.')
       end
-      versions = versions.select { |version| SemanticRange.satisfies?(version, ">#{from_version}") }.compact.sort
+      versions = versions.select do |version|
+        force? || SemanticRange.satisfies?(version, ">#{from_version}")
+      end.compact.sort
 
       if versions.any?
         versions.each do |version|
@@ -34,7 +38,7 @@ module PlutoniumGenerators
         end
 
         installed_version = versions.last
-        # write_config :installed, feature => installed_version
+        write_config :installed, feature => installed_version
 
         if root_pug?
           bundle! if bundle?
@@ -89,13 +93,6 @@ module PlutoniumGenerators
       end
     end
 
-    def pug_installed?(feature, version: nil)
-      installed_version = read_config(:installed, feature)
-      return false unless installed_version.present?
-
-      version.present? ? SemanticRange.satisfies?(installed_version, ">=#{version}") : true
-    end
-
     def after_bundle(command, *args, **kwargs)
       add_task_after(:bundle, [command, args, kwargs])
     end
@@ -122,7 +119,7 @@ module PlutoniumGenerators
 
     def pug(command)
       args = options.slice('lint', 'interactive').map { |k, v| "--#{k} #{v}" }.join ' '
-      generate "pu:#{command} --pug=#{depth + 1} #{args}"
+      generate "pu:#{command} --pug-id=#{depth + 1} --force=#{force?} #{args}"
     end
 
     private
@@ -180,7 +177,11 @@ module PlutoniumGenerators
     end
 
     def depth
-      options[:pug]
+      options[:pug_id]
+    end
+
+    def force?
+      options[:force]
     end
 
     def root_pug?
