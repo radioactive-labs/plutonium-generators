@@ -31,6 +31,9 @@ module Pu
         proc_file 'sidekiq: bundle exec sidekiq -C config/sidekiq.yml'
         after_bundle :environment, 'config.active_job.queue_adapter = :sidekiq'
 
+        # Change the default mailer queue name
+        after_bundle :environment, "config.action_mailer.deliver_later_queue_name = 'mailers'"
+
         pug 'setup:rspec_sidekiq' if pug_installed? :rspec
       end
     end

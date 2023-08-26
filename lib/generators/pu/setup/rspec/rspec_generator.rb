@@ -36,6 +36,10 @@ module Pu
         after_bundle :generate,
                      'rspec:install --force'
         after_bundle :gsub_file, 'spec/spec_helper.rb', /^=begin$|^=end\n/, ''
+        after_bundle :gsub_file, 'spec/rails_helper.rb', /^abort.*/,
+                     "abort('The Rails environment is not safe for running tests!') unless Rails.env.test?"
+        after_bundle :gsub_file, 'spec/rails_helper.rb', /^# Dir\[Rails/, 'Dir[Rails'
+
         after_bundle :run, 'bundle binstubs rspec-core'
       end
 
@@ -47,10 +51,10 @@ module Pu
 
       def webmock
         add_gem 'webmock', group: :test
-        after_bundle :insert_into_file, 'spec/rails_helper.rb', "\nrequire webmock/rspec\n",
+        after_bundle :insert_into_file, 'spec/rails_helper.rb', "\nrequire 'webmock/rspec'\n",
                      after: /# Add additional requires below this line.*\n/
         after_bundle :insert_into_file, 'spec/rails_helper.rb', "WebMock.disable_net_connect!\n",
-                     after: "require webmock/rspec\n"
+                     after: "require 'webmock/rspec'\n"
       end
 
       def shoulda_matchers

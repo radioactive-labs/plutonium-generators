@@ -25,7 +25,7 @@ module Pu
         after_bundle :template, 'config/database.yml.tt', force: true
 
         # No longer need this since we are using postgres
-        remove_gem 'sqlite3'
+        after_bundle :remove_gem, 'sqlite3'
       end
     end
   end
