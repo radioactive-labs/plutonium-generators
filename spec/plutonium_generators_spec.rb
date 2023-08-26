@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe PlutoniumGenerators do
-  it "has a version number" do
-    expect(PlutoniumGenerators::VERSION).not_to be nil
+  it 'has a version number' do
+    expect(VERSION).not_to be nil
   end
 
-  it "does something useful" do
+  it 'does something useful' do
     expect(false).to eq(true)
   end
 end

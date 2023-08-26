@@ -23,7 +23,7 @@ module PlutoniumGenerators
         def build_schema(schema_class)
           schema = schema_class.as_json
           context = {
-            schema_class: schema_class,
+            schema_class:,
             schema: schema_class,
             type_schema: {},
             query_name: schema['data']['__schema']['queryType']&.dig('name'),
@@ -40,7 +40,6 @@ module PlutoniumGenerators
           # build_mutation context
           # build_subscription context
 
-          # File.write 'schema.json', JSON.pretty_generate(context.except(:schema_class))
           File.write 'schema.json', JSON.pretty_generate(context[:schema])
           context
         end

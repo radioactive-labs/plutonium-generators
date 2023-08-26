@@ -1,0 +1,10 @@
+---
+:concurrency: 5
+staging:
+  :concurrency: 10
+production:
+  :concurrency: 15
+:queues:
+  - ["priority", 3]
+  - ["mailers", 2]
+  - ["default", 1]

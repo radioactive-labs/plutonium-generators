@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.join(__dir__, 'lib/plutonium_generators/version')
 
 Gem::Specification.new do |spec|
@@ -28,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'factory_bot-awesome_linter'
   spec.add_dependency 'railties'
   spec.add_dependency 'semantic_range'
 end

@@ -1,0 +1,14 @@
+---
+services:
+  postgres:
+    restart: unless-stopped
+    image: postgres:15
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: <%= app_name %>,<%= app_name %>_testd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./.data/postgres/data:/var/lib/postgresql/data
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"

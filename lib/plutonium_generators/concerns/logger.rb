@@ -4,19 +4,19 @@ module PlutoniumGenerators
   module Concerns
     module Logger
       def debug(msg)
-        say "\e[33m#{format_log msg, :debug}\e[0m"
+        say format_log(msg, :debug), :magenta
       end
 
       def info(msg)
-        say "\e[34m#{format_log msg, :info}\e[0m\n"
+        say format_log(msg, :info), :blue
       end
 
       def success(msg)
-        say "\e[32m#{format_log msg, :success}\e[0m"
+        say format_log(msg, :success), :green
       end
 
       def error(msg)
-        say "\e[31m#{format_log msg, :error}\e[0m\n"
+        say format_log(msg, :error), :red
         exit(1)
       end
 
@@ -26,9 +26,10 @@ module PlutoniumGenerators
 
       private
 
-      def format_log(msg, log_level)
-        indent = ' ' * (log_level.length + 2)
-        "#{log_level}: #{msg}".lines.join indent
+      def format_log(msg, _log_level)
+        # indentation = ' ' * (log_level.length + 2)
+        # "#{log_level}: #{msg}" # .lines.join(indentation)
+        msg
       end
     end
   end

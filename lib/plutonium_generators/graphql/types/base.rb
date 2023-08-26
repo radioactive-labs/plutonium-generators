@@ -49,8 +49,8 @@ module PlutoniumGenerators
 
         def repr
           @repr ||= {
-            name: name,
-            type_hash: type_hash
+            name:,
+            type_hash:
           }
         end
 

@@ -2,6 +2,8 @@
 
 require File.expand_path('../../../../plutonium_generators', __dir__)
 
+return unless PlutoniumGenerators.rails?
+
 module Pu
   module Specs
     class QueryGenerator < Rails::Generators::Base
@@ -43,7 +45,7 @@ module Pu
       end
 
       def generate_spec
-        spec_template = 'query_spec.erb'
+        spec_template = 'query_spec.rb.tt'
         spec_path = "spec/queries/#{query_name.underscore}_spec.rb"
 
         template(spec_template, spec_path, force: true)

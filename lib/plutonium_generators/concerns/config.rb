@@ -16,19 +16,22 @@ module PlutoniumGenerators
       private
 
       def config
-        @config ||= if File.exist? config_file
-                      YAML.load_file(config_file) || {}
-                    else
-                      {}
-                    end
+        in_root do
+          if File.exist? config_filename
+            YAML.load_file(config_filename, permitted_classes: [Regexp, Symbol]) || {}
+          else
+            {}
+          end
+        end
       end
 
       def write_config!(config)
-        File.write(config_file, YAML.dump(config))
-        @config = config
+        in_root do
+          File.write(config_filename, YAML.dump(config))
+        end
       end
 
-      def config_file
+      def config_filename
         '.pu'
       end
     end

@@ -5,6 +5,8 @@ Dir[File.join(__dir__, 'concerns/*')].each do |file|
   require file
 end
 
+return unless PlutoniumGenerators.rails?
+
 module Pu
   module Specs
     class ModelGenerator < Rails::Generators::Base
@@ -34,8 +36,7 @@ module Pu
       class_option :factory, type: :boolean, default: true
       class_option :spec, type: :boolean, default: true
       class_option :force_external_spec, type: :boolean, default: false,
-                                  desc: 'Force the generation of a spec for models in libraries/gems.'
-      class_option :lint, type: :boolean, default: false, desc: 'Lint generated factories'
+                                         desc: 'Force the generation of a spec for models in libraries/gems.'
 
       def start
         setup
@@ -56,7 +57,7 @@ module Pu
           )
         end
 
-        if options[:lint]
+        if lint?
           info 'Running factory_bot:lint'
           `rails factory_bot:lint factory=#{model_class_underscored}`
           info 'Completed factory_bot:lint'
@@ -87,12 +88,12 @@ module Pu
 
         [
           {
-            src: 'model_spec.erb',
+            src: 'model_spec.rb.tt',
             dest: "spec/models/#{model_class_underscored}_spec.rb",
             skip: true
           },
           {
-            src: 'model_spec.auto.erb',
+            src: 'model_spec.auto.rb.tt',
             dest: "spec/models/#{model_class_underscored}_spec.auto.rb",
             force: true
           }
@@ -106,12 +107,12 @@ module Pu
 
         [
           {
-            src: 'model_factory.erb',
+            src: 'model_factory.rb.tt',
             dest: "spec/factories/#{model_class_underscored}.rb",
             skip: true
           },
           {
-            src: 'model_factory.auto.erb',
+            src: 'model_factory.auto.rb.tt',
             dest: "spec/factories/#{model_class_underscored}.auto.rb",
             force: true
           }

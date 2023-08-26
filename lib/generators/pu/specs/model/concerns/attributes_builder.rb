@@ -38,7 +38,7 @@ module Concerns
 
     def build_attribute(attribute_name)
       column = model_class.column_for_attribute(attribute_name)
-      attribute_name_key = attribute_name.gsub('_digest', '')
+      attribute_name_key = attribute_name.sub('_digest', '')
       validators = model_class.validators_on(attribute_name_key).each_with_object({}) do |v, hash|
         hash[v.kind] = v.options
       end

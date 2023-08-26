@@ -8,7 +8,7 @@ module PlutoniumGenerators
 
         def repr
           @repr ||= super.merge({
-                                  fields: fields&.map { |k, v| [k, v.repr] }.to_h
+                                  fields: fields&.transform_values(&:repr)
                                 })
         end
 

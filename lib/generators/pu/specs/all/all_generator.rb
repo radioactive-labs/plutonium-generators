@@ -2,6 +2,8 @@
 
 require File.expand_path('../../../../plutonium_generators', __dir__)
 
+return unless PlutoniumGenerators.rails?
+
 module Pu
   module Specs
     class AllGenerator < Rails::Generators::Base
@@ -12,7 +14,6 @@ module Pu
       # class_option :graphql_schema, type: :string, default: nil
       # class_option :graphql_queries, type: :boolean, default: false
       class_option :models, type: :boolean, default: true
-      class_option :lint, type: :boolean, default: false, desc: 'Run linters for generated assets'
 
       desc "Runs spec generators for the entire project\n\n" \
            "Models:\n" \
@@ -29,9 +30,9 @@ module Pu
       private
 
       def lint_models
-        if options[:lint]
+        if lint?
           info 'Running factory_bot:lint'
-          `rails factory_bot:lint`
+          rake 'factory_bot:lint'
         else
           info(
             "Run `rails factory_bot:lint` to validate your generated factories.\n" \
@@ -55,10 +56,10 @@ module Pu
         Rails.application.eager_load! unless Rails.application.config.eager_load
 
         ApplicationRecord.descendants.each do |model|
-          generate "pu:specs:model #{model} --no-lint"
+          generate "pu:specs:model #{model} --no-lint --no-interactive --no-bundle"
         end
 
-        success "Model spec generation compeleted"
+        success 'Model spec generation compeleted'
       end
     end
   end

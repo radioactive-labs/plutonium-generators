@@ -7,6 +7,7 @@ module PlutoniumGenerators
   class CLI < Thor
     map 'i' => :install
     map 'g' => :generate
+    map 'gl' => :generators
     map %w[--version -v] => :__print_version
 
     # desc "install", "Install Plutonium"
@@ -15,8 +16,16 @@ module PlutoniumGenerators
     # end
 
     desc 'generate GENERATOR [options]', 'Run plutonium generator'
-    def generate(generator, *options)
+    def generate(generator, *_options)
       Rails::Generators.invoke("pu:#{generator}", options)
+    end
+
+    desc 'generators, gl', 'View list of available generators'
+    def generators
+      generators = Rails::Generators.sorted_groups.to_h['pu']
+      puts
+      generators.each { |gen| puts gen.sub(/^pu:/, '') }
+      puts
     end
 
     desc '--version, -v', 'Print gem version'
