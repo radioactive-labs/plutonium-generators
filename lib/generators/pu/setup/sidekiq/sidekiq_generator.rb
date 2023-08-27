@@ -28,7 +28,10 @@ module Pu
           after_bundle :copy_file, file
         end
 
-        proc_file 'sidekiq: bundle exec sidekiq -C config/sidekiq.yml'
+        proc_file :sidekiq, 'bundle exec sidekiq -C config/sidekiq.yml'
+        proc_file :sidekiq, './wait-for-it.sh -t 0 localhost:6379 -- bundle exec sidekiq -C config/sidekiq.yml',
+                  env: :dev
+
         after_bundle :environment, 'config.active_job.queue_adapter = :sidekiq'
 
         # Change the default mailer queue name

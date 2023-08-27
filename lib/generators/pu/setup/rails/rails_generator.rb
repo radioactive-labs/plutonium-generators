@@ -19,7 +19,7 @@ module Pu
       def install_v0_1_0!
         duplicate_file 'config/environments/production.rb', 'config/environments/staging.rb'
 
-        proc_file 'web: bundle exec rails server -p $PORT'
+        proc_file :web, 'bundle exec rails server -p $PORT'
 
         pug 'setup:dev'
 

@@ -41,11 +41,15 @@ module PlutoniumGenerators
         write_config :installed, feature => installed_version
 
         if root_pug?
-          bundle! if bundle?
+          if bundle?
+            bundle!
+            # run last minute bundle changes
+            bundle! false
+          end
 
           begin
             log :rubocop, 'autocorrect'
-            run_captured 'bundle exec rubocop -a'
+            run_eval 'bundle exec rubocop -a'
           rescue StandardError
             # Do nothing
           end
@@ -124,14 +128,14 @@ module PlutoniumGenerators
 
     private
 
-    def bundle!
+    def bundle!(run_tasks = true)
       log :bundle, 'install'
 
-      execute_tasks_before! :bundle
+      execute_tasks_before! :bundle if run_tasks
       Bundler.with_unbundled_env do
         run 'bundle install', verbose: false
       end
-      execute_tasks_after! :bundle
+      execute_tasks_after! :bundle if run_tasks
     end
 
     def add_task(event, action, task)
