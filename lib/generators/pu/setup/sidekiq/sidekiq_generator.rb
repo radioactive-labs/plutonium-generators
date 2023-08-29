@@ -29,7 +29,7 @@ module Pu
         end
 
         proc_file :sidekiq, 'bundle exec sidekiq -C config/sidekiq.yml'
-        proc_file :sidekiq, './wait-for-it.sh -t 0 localhost:6379 -- bundle exec sidekiq -C config/sidekiq.yml',
+        proc_file :sidekiq, 'unset PORT && env RUBY_DEBUG_OPEN=true ./wait-for-it.sh -t 0 localhost:6379 -- bundle exec sidekiq -C config/sidekiq.yml',
                   env: :dev
 
         after_bundle :environment, 'config.active_job.queue_adapter = :sidekiq'

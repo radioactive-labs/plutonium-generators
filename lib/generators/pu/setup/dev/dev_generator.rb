@@ -27,10 +27,10 @@ module Pu
         end
         environment "# Enable query logging\nActiveRecord::Base.logger = Logger.new($stdout)", env: :development
 
-        web_cmd =
+        web_proc =
           'unset PORT && env RUBY_DEBUG_OPEN=true ./wait-for-it.sh -t 0 localhost:5432 ' \
           '-- ./wait-for-it.sh -t 0 localhost:6379 -- rails server'
-        proc_file :web, web_cmd, env: :dev
+        proc_file :web, web_proc, env: :dev
         proc_file 'docker-compose', 'docker compose up', env: :dev
 
         copy_file 'wait-for-it.sh'
