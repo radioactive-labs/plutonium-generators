@@ -1,0 +1,5 @@
+# frozen_string_literal: true
+
+collection @resource_records, root: :<%= resource_name_plural_underscored %>, object_root: false
+
+extends 'dashboard/<%= resource_name_plural_underscored %>/_<%= resource_name_underscored %>'

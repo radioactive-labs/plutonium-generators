@@ -1,0 +1,66 @@
+# frozen_string_literal: true
+
+module <%= resource_name_plural %>
+  class Presenter < ResourcePresenter
+    def build_collection(permitted_attributes)
+      fields = collection_fields & permitted_attributes
+
+      customize_fields(Pu::UI::Builder::Collection.new(<%= resource_name %>))
+        .with_record_actions(build_actions.only!(:show, :edit, :destroy))
+        .with_actions(build_actions.only!(:create))
+        .with_fields(fields)
+    end
+
+    def build_detail(permitted_attributes)
+      fields = detail_fields & permitted_attributes
+
+      customize_fields(Pu::UI::Builder::Detail.new(<%= resource_name %>))
+        .with_actions(build_actions.except!(:create, :show))
+        .with_fields(fields)
+    end
+
+    def build_form(permitted_attributes)
+      inputs = form_inputs & permitted_attributes
+
+      customize_inputs(Pu::UI::Builder::Form.new(<%= resource_name %>))
+        .with_inputs(inputs)
+    end
+
+    def build_associations(permitted_associations)
+      associations = associations_list & permitted_associations
+      Pu::Builders::Associations.new
+                                .with_associations(associations)
+    end
+
+    def build_actions
+      Pu::UI::Builder::Actions.new
+                              .with_standard_actions
+    end
+
+    private
+
+    def collection_fields
+      <%= (read_fields - %i[id]).inspect %>
+    end
+
+    def detail_fields
+      <%= (read_fields - %i[id]).inspect %>
+    end
+
+    def form_inputs
+      <%= create_fields.inspect %>
+    end
+
+    def associations_list
+      []
+    end
+
+    def customize_fields(builder)
+      builder
+    end
+
+    def customize_inputs(builder)
+      builder
+    end
+  end
+end
