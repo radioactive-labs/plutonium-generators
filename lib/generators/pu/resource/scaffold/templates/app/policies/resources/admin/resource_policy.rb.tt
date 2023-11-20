@@ -2,16 +2,16 @@
 
 module Resources
   module Admin
-    class <%= resource_name %>Policy < ApplicationPolicy
+    class <%= resource_name %>Policy < Resources::Admin::ResourcePolicy
       include Resources::<%= resource_name %>Policy
-      include Resources::Admin::ResourcePolicy
 
       class Scope
         include Pu::Policy::Initializer
 
         def resolve
-          <%= resource_name %>
-            .all
+          scope = <%= resource_name %>.all
+          scope = @context.parent.<%= resource_name_plural_underscored %> if @context.parent.present?
+          scope
           <%- if entity_assoc -%>
             .includes(:<%= entity_assoc.name %>)
           <%- end -%>

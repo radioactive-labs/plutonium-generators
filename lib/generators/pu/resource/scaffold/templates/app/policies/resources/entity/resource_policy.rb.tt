@@ -2,9 +2,8 @@
 
 module Resources
   module Entity
-    class <%= resource_name %>Policy < ApplicationPolicy
+    class <%= resource_name %>Policy < Resources::Entity::ResourcePolicy
       include Resources::<%= resource_name %>Policy
-      include Resources::Entity::ResourcePolicy
 
       class Scope
         include Pu::Policy::Initializer

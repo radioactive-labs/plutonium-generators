@@ -147,7 +147,7 @@ module Pu
       end
 
       def entity?
-        resource_class < Entity
+        resource_class == Entity || resource_class < Entity
       end
 
       def resource_name
