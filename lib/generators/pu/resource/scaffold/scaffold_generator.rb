@@ -36,13 +36,8 @@ module Pu
       end
 
       def scaffold_route
-        if skip_existing? && File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
-          return
-        end
-
-        gsub_file 'config/routes.rb',
-                  /\n.*concern :#{resource_name_underscored}_routes do(.|\n)*<< :#{resource_name_underscored}_routes\n/,
-                  ''
+        route_exists = File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
+        return if route_exists && skip_existing?
 
         route = <<~TILDE
           concern :#{resource_name_underscored}_routes do
@@ -54,15 +49,20 @@ module Pu
           end
           entity_resource_routes << :#{resource_name_underscored}_routes
           admin_resource_routes << :#{resource_name_underscored}_routes
-
         TILDE
 
         route.gsub!(/entity_resource_routes << :#{resource_name_underscored}_routes\n/, '') if admin_only?
-
         route = indent route, 2
-        insert_into_file 'config/routes.rb',
-                         route,
-                         before: /.*# pu:add #{entity? ? 'entity' : 'resource'} routes above.*/
+
+        if route_exists
+          gsub_file 'config/routes.rb',
+                    /.*concern :#{resource_name_underscored}_routes do(.|\n)*<< :#{resource_name_underscored}_routes\n/,
+                    route
+        else
+          insert_into_file 'config/routes.rb',
+                           "#{route}\n",
+                           before: /.*# pu:add #{entity? ? 'entity' : 'resource'} routes above.*/
+        end
       end
 
       def scaffold_controllers
@@ -119,7 +119,7 @@ module Pu
         @read_fields ||= begin
           attribute_names = resource_class.attribute_names.map { |attr| attr unless associations[attr] }.compact
           attribute_names = attribute_names.map(&:to_sym)
-          attribute_names.unshift entity_assoc.name if entity_assoc
+          attribute_names.insert(1, entity_assoc.name) if entity_assoc
           attribute_names - %i[slug aasm_state]
         end
       end
