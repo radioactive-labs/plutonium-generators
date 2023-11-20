@@ -15,8 +15,7 @@ module Pu
       class_option :env, type: :string, default: 'all'
 
       def start
-        raise 'Resource must include Pu:ResourceModel' unless resource_class < Pu::ResourceModel
-
+        setup_models
         scaffold_route
         scaffold_controllers
         scaffold_views
@@ -28,6 +27,14 @@ module Pu
 
       protected
 
+      def setup_models
+        return if resource_class < Pu::ResourceModel
+
+        insert_into_file "app/models/#{resource_name_underscored}.rb",
+                         "include ResourceModel\n",
+                         before: /.*# pu:add concerns.*\n/
+      end
+
       def scaffold_route
         if skip_existing? && File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
           return
@@ -38,7 +45,6 @@ module Pu
                   ''
 
         route = <<~TILDE
-
           concern :#{resource_name_underscored}_routes do
             #{resource_name_underscored}_concerns = %i[]
             #{resource_name_underscored}_concerns += shared_resource_concerns
@@ -48,28 +54,30 @@ module Pu
           end
           entity_resource_routes << :#{resource_name_underscored}_routes
           admin_resource_routes << :#{resource_name_underscored}_routes
+
         TILDE
 
-        route.gsub!(/entity_resource_routes << :#{resource_name_underscored}_routes\n/, '') if entity?
+        route.gsub!(/entity_resource_routes << :#{resource_name_underscored}_routes\n/, '') if admin_only?
 
         route = indent route, 2
-        pattern = entity? ? /# pu:routes:entities.*\n/ : /# pu:routes:resources.*\n/
-        insert_into_file 'config/routes.rb', route, after: pattern
+        insert_into_file 'config/routes.rb',
+                         route,
+                         before: /.*# pu:add #{entity? ? 'entity' : 'resource'} routes above.*/
       end
 
       def scaffold_controllers
-        unless entity?
-          template 'app/controllers/entity_resources/resource_controller.rb',
-                   "app/controllers/entity_resources/#{resource_name_plural_underscored}_controller.rb", skip: skip_existing?
-        end
-
         template 'app/controllers/admin_resources/resource_controller.rb',
                  "app/controllers/admin_resources/#{resource_name_plural_underscored}_controller.rb", skip: skip_existing?
+
+        return if admin_only?
+
+        template 'app/controllers/entity_resources/resource_controller.rb',
+                 "app/controllers/entity_resources/#{resource_name_plural_underscored}_controller.rb", skip: skip_existing?
       end
 
       def scaffold_views
         %w[entity_resources admin_resources].each do |subdir|
-          next if subdir != 'admin_resources' && entity?
+          next if subdir != 'admin_resources' && admin_only?
 
           template 'app/views/resources/resource/_resource.html.erb',
                    "app/views/#{subdir}/#{resource_name_plural_underscored}/_#{resource_name_underscored}.html.erb", skip: skip_existing?
@@ -85,7 +93,7 @@ module Pu
         template 'app/policies/resources/admin/resource_policy.rb',
                  "app/policies/resources/admin/#{resource_name_underscored}_policy.rb", skip: skip_existing?
 
-        return if entity?
+        return if admin_only?
 
         template 'app/policies/resources/entity/resource_policy.rb',
                  "app/policies/resources/entity/#{resource_name_underscored}_policy.rb", skip: skip_existing?
@@ -97,7 +105,7 @@ module Pu
         template 'app/resources/resource/admin_presenter.rb',
                  "app/resources/#{resource_name_plural_underscored}/admin_presenter.rb", skip: skip_existing?
 
-        return if entity?
+        return if admin_only?
 
         template 'app/resources/resource/entity_presenter.rb',
                  "app/resources/#{resource_name_plural_underscored}/entity_presenter.rb", skip: skip_existing?
@@ -112,7 +120,7 @@ module Pu
           attribute_names = resource_class.attribute_names.map { |attr| attr unless associations[attr] }.compact
           attribute_names = attribute_names.map(&:to_sym)
           attribute_names.unshift entity_assoc.name if entity_assoc
-          attribute_names - [:slug]
+          attribute_names - %i[slug aasm_state]
         end
       end
 
@@ -128,6 +136,10 @@ module Pu
 
       def assoc?(attr)
         resource_class.reflect_on_association(attr)
+      end
+
+      def admin_only?
+        entity? || entity_assoc.nil?
       end
 
       def entity?
