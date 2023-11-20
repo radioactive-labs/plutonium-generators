@@ -1,5 +1,0 @@
-# frozen_string_literal: true
-
-object @record
-
-extends 'dashboard/<%= resource_name_plural_underscored %>/_<%= resource_name_underscored %>'

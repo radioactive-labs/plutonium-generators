@@ -69,28 +69,12 @@ module Pu
 
       def scaffold_views
         %w[entity_resources admin_resources].each do |subdir|
-          next if subdir == 'entity_resources' && entity?
+          next if subdir != 'admin_resources' && entity?
 
           template 'app/views/resources/resource/_resource.html.erb',
                    "app/views/#{subdir}/#{resource_name_plural_underscored}/_#{resource_name_underscored}.html.erb", skip: skip_existing?
           copy_file 'app/views/resources/resource/_resource.rabl',
                     "app/views/#{subdir}/#{resource_name_plural_underscored}/_#{resource_name_underscored}.rabl", skip: skip_existing?
-
-          copy_file 'app/views/resources/resource/edit.html.erb',
-                    "app/views/#{subdir}/#{resource_name_plural_underscored}/edit.html.erb", skip: skip_existing?
-
-          copy_file 'app/views/resources/resource/index.html.erb',
-                    "app/views/#{subdir}/#{resource_name_plural_underscored}/index.html.erb", skip: skip_existing?
-          template 'app/views/resources/resource/index.rabl',
-                   "app/views/#{subdir}/#{resource_name_plural_underscored}/index.rabl", skip: skip_existing?
-
-          copy_file 'app/views/resources/resource/new.html.erb',
-                    "app/views/#{subdir}/#{resource_name_plural_underscored}/new.html.erb", skip: skip_existing?
-
-          copy_file 'app/views/resources/resource/show.html.erb',
-                    "app/views/#{subdir}/#{resource_name_plural_underscored}/show.html.erb", skip: skip_existing?
-          template 'app/views/resources/resource/show.rabl',
-                   "app/views/#{subdir}/#{resource_name_plural_underscored}/show.rabl", skip: skip_existing?
         end
       end
 
