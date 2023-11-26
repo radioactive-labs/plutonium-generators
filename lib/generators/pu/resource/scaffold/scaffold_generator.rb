@@ -39,13 +39,17 @@ module Pu
         route_exists = File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
         return if route_exists && skip_existing?
 
-        controller_module = "module: '#{resource_module_underscored}', " unless resource_module_underscored.blank?
+        unless resource_module_underscored.blank?
+          module_config = indent(
+            "module: '#{resource_module_underscored}', controller: '#{resource_attribute_plural}', path: '#{resources_path}' ", 40
+          )
+          module_config = ",\n#{module_config}"
+        end
         route = <<~TILDE
           concern :#{resource_name_underscored}_routes do
             #{resource_name_underscored}_concerns = %i[]
             #{resource_name_underscored}_concerns += shared_resource_concerns
-            resources :#{resource_name_plural_underscored}, concerns: #{resource_name_underscored}_concerns,
-                                        #{controller_module}controller: '#{resource_attribute_plural}' do
+            resources :#{resource_name_plural_underscored}, concerns: #{resource_name_underscored}_concerns#{module_config} do
               # pu:routes:#{resource_name_plural_underscored}
             end
           end
@@ -78,14 +82,16 @@ module Pu
       end
 
       def scaffold_views
-        # %w[entity_resources admin_resources].each do |subdir|
-        #   next if subdir != 'admin_resources' && admin_only?
+        %w[entity_resources admin_resources].each do |subdir|
+          next if subdir != 'admin_resources' && admin_only?
 
-        #   template 'app/views/resources/resource/_resource.html.erb',
-        #            "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.html.erb", skip: skip_existing?
-        #   copy_file 'app/views/resources/resource/_resource.rabl',
-        #             "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.rabl", skip: skip_existing?
-        # end
+          create_file "app/views/#{subdir}/#{resources_path}/.keep", ''
+
+          #   template 'app/views/resources/resource/_resource.html.erb',
+          #            "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.html.erb", skip: skip_existing?
+          #   copy_file 'app/views/resources/resource/_resource.rabl',
+          #             "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.rabl", skip: skip_existing?
+        end
       end
 
       def scaffold_policies
@@ -122,7 +128,7 @@ module Pu
           attribute_names = resource_class.attribute_names.map { |attr| attr unless associations[attr] }.compact
           attribute_names = attribute_names.map(&:to_sym)
           attribute_names.insert(1, entity_assoc.name) if entity_assoc
-          attribute_names - %i[slug aasm_state]
+          attribute_names - %i[]
         end
       end
 
