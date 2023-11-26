@@ -39,7 +39,7 @@ module Pu
         route_exists = File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
         return if route_exists && skip_existing?
 
-        unless resource_module_underscored.blank?
+        if resource_module_underscored.present?
           module_config = indent(
             "module: '#{resource_module_underscored}', controller: '#{resource_attribute_plural}', path: '#{resources_path}' ", 40
           )
@@ -179,11 +179,11 @@ module Pu
       end
 
       def resource_name_underscored
-        @resource_name_underscored ||= resource_name.underscore.gsub('/', '_')
+        @resource_name_underscored ||= resource_name.underscore.tr('/', '_')
       end
 
       def resource_name_plural_underscored
-        @resource_name_plural_underscored ||= resource_name_plural.underscore.gsub('/', '_')
+        @resource_name_plural_underscored ||= resource_name_plural.underscore.tr('/', '_')
       end
 
       def resource_path
