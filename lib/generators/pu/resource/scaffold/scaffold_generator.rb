@@ -30,8 +30,8 @@ module Pu
       def setup_models
         return if resource_class < Pu::ResourceModel
 
-        insert_into_file "app/models/#{resource_name_underscored}.rb",
-                         "include ResourceModel\n",
+        insert_into_file "app/models/#{resource_path}.rb",
+                         indent("include ResourceModel\n", 2),
                          before: /.*# pu:add concerns.*\n/
       end
 
@@ -39,11 +39,13 @@ module Pu
         route_exists = File.read('config/routes.rb').match?(/concern :#{resource_name_underscored}_routes do/)
         return if route_exists && skip_existing?
 
+        controller_module = "module: '#{resource_module_underscored}', " unless resource_module_underscored.blank?
         route = <<~TILDE
           concern :#{resource_name_underscored}_routes do
             #{resource_name_underscored}_concerns = %i[]
             #{resource_name_underscored}_concerns += shared_resource_concerns
-            resources :#{resource_name_plural_underscored}, concerns: #{resource_name_underscored}_concerns do
+            resources :#{resource_name_plural_underscored}, concerns: #{resource_name_underscored}_concerns,
+                                        #{controller_module}controller: '#{resource_attribute_plural}' do
               # pu:routes:#{resource_name_plural_underscored}
             end
           end
@@ -67,12 +69,12 @@ module Pu
 
       def scaffold_controllers
         template 'app/controllers/admin_resources/resource_controller.rb',
-                 "app/controllers/admin_resources/#{resource_name_plural_underscored}_controller.rb", skip: skip_existing?
+                 "app/controllers/admin_resources/#{resources_path}_controller.rb", skip: skip_existing?
 
         return if admin_only?
 
         template 'app/controllers/entity_resources/resource_controller.rb',
-                 "app/controllers/entity_resources/#{resource_name_plural_underscored}_controller.rb", skip: skip_existing?
+                 "app/controllers/entity_resources/#{resources_path}_controller.rb", skip: skip_existing?
       end
 
       def scaffold_views
@@ -80,35 +82,35 @@ module Pu
           next if subdir != 'admin_resources' && admin_only?
 
           template 'app/views/resources/resource/_resource.html.erb',
-                   "app/views/#{subdir}/#{resource_name_plural_underscored}/_#{resource_name_underscored}.html.erb", skip: skip_existing?
+                   "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.html.erb", skip: skip_existing?
           copy_file 'app/views/resources/resource/_resource.rabl',
-                    "app/views/#{subdir}/#{resource_name_plural_underscored}/_#{resource_name_underscored}.rabl", skip: skip_existing?
+                    "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.rabl", skip: skip_existing?
         end
       end
 
       def scaffold_policies
         template 'app/policies/resources/resource_policy.rb',
-                 "app/policies/resources/#{resource_name_underscored}_policy.rb", skip: skip_existing?
+                 "app/policies/resources/#{resource_path}_policy.rb", skip: skip_existing?
 
         template 'app/policies/resources/admin/resource_policy.rb',
-                 "app/policies/resources/admin/#{resource_name_underscored}_policy.rb", skip: skip_existing?
+                 "app/policies/resources/admin/#{resource_path}_policy.rb", skip: skip_existing?
 
         return if admin_only?
 
         template 'app/policies/resources/entity/resource_policy.rb',
-                 "app/policies/resources/entity/#{resource_name_underscored}_policy.rb", skip: skip_existing?
+                 "app/policies/resources/entity/#{resource_path}_policy.rb", skip: skip_existing?
       end
 
       def scaffold_presenters
         template 'app/resources/resource/presenter.rb',
-                 "app/resources/#{resource_name_plural_underscored}/presenter.rb", skip: skip_existing?
+                 "app/resources/#{resources_path}/presenter.rb", skip: skip_existing?
         template 'app/resources/resource/admin_presenter.rb',
-                 "app/resources/#{resource_name_plural_underscored}/admin_presenter.rb", skip: skip_existing?
+                 "app/resources/#{resources_path}/admin_presenter.rb", skip: skip_existing?
 
         return if admin_only?
 
         template 'app/resources/resource/entity_presenter.rb',
-                 "app/resources/#{resource_name_plural_underscored}/entity_presenter.rb", skip: skip_existing?
+                 "app/resources/#{resources_path}/entity_presenter.rb", skip: skip_existing?
       end
 
       def create_fields
@@ -130,8 +132,20 @@ module Pu
         end.compact.to_h.with_indifferent_access
       end
 
-      def entity_assoc
-        associations[:entity_id] if associations[:entity_id].present? && associations[:entity_id].macro != :has_many
+      def entity_assoc(source_class = nil)
+        @entity_assoc ||= {}
+
+        source_class ||= resource_class
+        @entity_assoc[source_class] ||= begin
+          matcher = lambda do |assoc|
+            assoc_class = assoc.class_name.constantize
+            assoc_class == Entity || assoc_class < Entity
+          end
+
+          assoc = source_class.reflect_on_all_associations(:belongs_to).select(&matcher).first
+          assoc = source_class.reflect_on_all_associations(:has_one).select(&matcher).first unless assoc.present?
+          assoc
+        end
       end
 
       def assoc?(attr)
@@ -159,11 +173,31 @@ module Pu
       end
 
       def resource_name_underscored
-        @resource_name_underscored ||= resource_name.underscore
+        @resource_name_underscored ||= resource_name.underscore.gsub('/', '_')
       end
 
       def resource_name_plural_underscored
-        @resource_name_plural_underscored ||= resource_name_plural.underscore
+        @resource_name_plural_underscored ||= resource_name_plural.underscore.gsub('/', '_')
+      end
+
+      def resource_path
+        @resource_path ||= resource_name.underscore
+      end
+
+      def resources_path
+        @resources_path ||= resource_name_plural.underscore
+      end
+
+      def resource_attribute
+        @resource_attribute ||= resource_name.demodulize.underscore
+      end
+
+      def resource_attribute_plural
+        @resource_attribute_plural ||= resource_name_plural.demodulize.underscore
+      end
+
+      def resource_module_underscored
+        @resource_module_underscored ||= resource_name.deconstantize.underscore
       end
 
       def skip_existing?

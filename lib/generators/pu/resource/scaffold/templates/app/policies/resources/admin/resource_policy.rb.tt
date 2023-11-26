@@ -9,7 +9,7 @@ module Resources
         include Pu::Policy::Initializer
 
         def resolve
-          scope = <%= resource_name %>.all
+          scope = ::<%= resource_name %>.all
           scope = @context.parent.<%= resource_name_plural_underscored %> if @context.parent.present?
           scope
           <%- if entity_assoc -%>

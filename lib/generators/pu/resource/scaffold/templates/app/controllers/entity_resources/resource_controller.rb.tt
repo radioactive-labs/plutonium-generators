@@ -2,6 +2,6 @@
 
 module EntityResources
   class <%= resource_name_plural %>Controller < ResourceController
-    controller_for <%= resource_name %>
+    controller_for ::<%= resource_name %>
   end
 end
