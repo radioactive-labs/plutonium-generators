@@ -41,7 +41,8 @@ module Pu
 
         if resource_module_underscored.present?
           module_config = indent(
-            "module: '#{resource_module_underscored}', controller: '#{resource_attribute_plural}', path: '#{resources_path}' ", 40
+            # underscore in the path prevents conflicts with root level model controllers
+            "module: '#{resource_module_underscored}', controller: '#{resource_attribute_plural}', path: '_/#{resources_path}' ", 40
           )
           module_config = ",\n#{module_config}"
         end
