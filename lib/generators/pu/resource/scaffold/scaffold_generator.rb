@@ -78,14 +78,14 @@ module Pu
       end
 
       def scaffold_views
-        %w[entity_resources admin_resources].each do |subdir|
-          next if subdir != 'admin_resources' && admin_only?
+        # %w[entity_resources admin_resources].each do |subdir|
+        #   next if subdir != 'admin_resources' && admin_only?
 
-          template 'app/views/resources/resource/_resource.html.erb',
-                   "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.html.erb", skip: skip_existing?
-          copy_file 'app/views/resources/resource/_resource.rabl',
-                    "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.rabl", skip: skip_existing?
-        end
+        #   template 'app/views/resources/resource/_resource.html.erb',
+        #            "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.html.erb", skip: skip_existing?
+        #   copy_file 'app/views/resources/resource/_resource.rabl',
+        #             "app/views/#{subdir}/#{resources_path}/_#{resource_attribute}.rabl", skip: skip_existing?
+        # end
       end
 
       def scaffold_policies
