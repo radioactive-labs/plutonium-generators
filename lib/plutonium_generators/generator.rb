@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'semantic_range'
+require "semantic_range"
 
-require File.join(__dir__, 'concerns/config.rb')
-require File.join(__dir__, 'concerns/logger.rb')
-require File.join(__dir__, 'concerns/serializer.rb')
-require File.join(__dir__, 'concerns/actions.rb')
+require File.join(__dir__, "concerns/config.rb")
+require File.join(__dir__, "concerns/logger.rb")
+require File.join(__dir__, "concerns/serializer.rb")
+require File.join(__dir__, "concerns/actions.rb")
 
 module PlutoniumGenerators
   module Generator
@@ -15,9 +15,9 @@ module PlutoniumGenerators
     include Concerns::Actions
 
     def self.included(base)
-      base.send :class_option, :interactive, type: :boolean, desc: 'Show prompts. Default: true'
-      base.send :class_option, :bundle, type: :boolean, desc: 'Run bundle after setup. Default: true'
-      base.send :class_option, :lint, type: :boolean, desc: 'Run linter after generation. Default: false'
+      base.send :class_option, :interactive, type: :boolean, desc: "Show prompts. Default: true"
+      base.send :class_option, :bundle, type: :boolean, desc: "Run bundle after setup. Default: true"
+      base.send :class_option, :lint, type: :boolean, desc: "Run linter after generation. Default: false"
     end
 
     def rails?
@@ -25,7 +25,7 @@ module PlutoniumGenerators
     end
 
     def appname
-      rails? ? Rails.application.class.module_parent.name : 'PlutoniumGenerators'
+      rails? ? Rails.application.class.module_parent.name : "PlutoniumGenerators"
     end
 
     def app_name

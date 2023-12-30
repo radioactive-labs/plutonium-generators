@@ -19,8 +19,8 @@
 
 ActiveRecord::Base.transaction do
   Dir[
-      File.expand_path('seeds/*.all.rb', __dir__),
-      File.expand_path("seeds/*.#{Rails.env}.rb", __dir__)
+    File.expand_path("seeds/*.all.rb", __dir__),
+    File.expand_path("seeds/*.#{Rails.env}.rb", __dir__)
   ].sort.each do |file|
     puts "Seeding #{File.basename file}"
     require file

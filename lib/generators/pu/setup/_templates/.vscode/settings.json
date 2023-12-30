@@ -18,7 +18,7 @@
     "editor.formatOnSave": true
   },
   "[ruby]": {
-    "editor.defaultFormatter": "castwide.solargraph",
+    "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
     "editor.formatOnSave": true
   },
   "[erb]": {

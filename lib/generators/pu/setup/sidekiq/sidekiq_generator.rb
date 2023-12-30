@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Setup
@@ -8,7 +8,7 @@ module Pu
       include PlutoniumGenerators::Generator
       include PlutoniumGenerators::Installer
 
-      desc 'Setup sidekiq'
+      desc "Setup sidekiq"
 
       def start
         install! :sidekiq
@@ -17,27 +17,27 @@ module Pu
       protected
 
       def install_v0_1_0!
-        add_gem 'sidekiq'
-        add_gem 'sidekiq-failures'
+        add_gem "sidekiq"
+        add_gem "sidekiq-failures"
 
         [
-          'config/sidekiq.yml',
-          'config/initializers/sidekiq.rb',
-          'app/sidekiq/sidekiq_job.rb'
+          "config/sidekiq.yml",
+          "config/initializers/sidekiq.rb",
+          "app/sidekiq/sidekiq_job.rb"
         ].each do |file|
           after_bundle :copy_file, file
         end
 
-        proc_file :sidekiq, 'bundle exec sidekiq -C config/sidekiq.yml'
-        proc_file :sidekiq, 'unset PORT && env RUBY_DEBUG_OPEN=true ./wait-for-it.sh -t 0 localhost:6379 -- bundle exec sidekiq -C config/sidekiq.yml',
-                  env: :dev
+        proc_file :sidekiq, "bundle exec sidekiq -C config/sidekiq.yml"
+        proc_file :sidekiq, "unset PORT && env RUBY_DEBUG_OPEN=true ./wait-for-it.sh -t 0 localhost:6379 -- bundle exec sidekiq -C config/sidekiq.yml",
+          env: :dev
 
-        after_bundle :environment, 'config.active_job.queue_adapter = :sidekiq'
+        after_bundle :environment, "config.active_job.queue_adapter = :sidekiq"
 
         # Change the default mailer queue name
         after_bundle :environment, "config.action_mailer.deliver_later_queue_name = 'mailers'"
 
-        pug 'setup:rspec_sidekiq' if pug_installed? :rspec
+        pug "setup:rspec_sidekiq" if pug_installed? :rspec
       end
     end
   end

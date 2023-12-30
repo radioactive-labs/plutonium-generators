@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'semantic_range'
-require 'yaml'
+require "semantic_range"
+require "yaml"
 
 module PlutoniumGenerators
   module Installer
     def self.included(base)
-      base.send :source_root, File.expand_path('lib/generators/pu/setup/_templates', PlutoniumGenerators::ROOT_DIR)
+      base.send :source_root, File.expand_path("lib/generators/pu/setup/_templates", PlutoniumGenerators::ROOT_DIR)
 
-      base.send :class_option, :interactive, type: :boolean, desc: 'Show prompts. Default: true'
-      base.send :class_option, :bundle, type: :boolean, desc: 'Run bundle after setup. Default: true'
-      base.send :class_option, :lint, type: :boolean, desc: 'Run linter after generation. Default: false'
+      base.send :class_option, :interactive, type: :boolean, desc: "Show prompts. Default: true"
+      base.send :class_option, :bundle, type: :boolean, desc: "Run bundle after setup. Default: true"
+      base.send :class_option, :lint, type: :boolean, desc: "Run linter after generation. Default: false"
       base.send :class_option, :pug_id, type: :numeric, default: 0,
-                                        desc: 'Used internally by plutonium generators. ' \
-                                         'Do not set this value as it might lead to unspecified behaviour.'
+        desc: "Used internally by plutonium generators. " \
+         "Do not set this value as it might lead to unspecified behaviour."
       base.send :class_option, :force, type: :boolean, default: false,
-                                       desc: 'Force installation even if it have been previously installed.'
+        desc: "Force installation even if it have been previously installed."
     end
 
     protected
@@ -23,9 +23,9 @@ module PlutoniumGenerators
     def install!(feature)
       set_ruby_version! if root_pug?
 
-      from_version = read_config(:installed, feature, default: '0.0.0')
+      from_version = read_config(:installed, feature, default: "0.0.0")
       versions = methods.map do |m|
-        m.to_s.match(/install_v([\d_]+)/)&.[](1)&.tr('_', '.')
+        m.to_s.match(/install_v([\d_]+)/)&.[](1)&.tr("_", ".")
       end
       versions = versions.select do |version|
         force? || SemanticRange.satisfies?(version, ">#{from_version}")
@@ -34,7 +34,7 @@ module PlutoniumGenerators
       if versions.any?
         versions.each do |version|
           log :install!, "#{feature} v#{version}"
-          send "install_v#{version.tr('.', '_')}!".to_sym
+          send "install_v#{version.tr(".", "_")}!".to_sym
         end
 
         installed_version = versions.last
@@ -48,9 +48,9 @@ module PlutoniumGenerators
           end
 
           begin
-            log :rubocop, 'autocorrect'
-            run_eval 'bundle exec rubocop -a'
-          rescue StandardError
+            log :rubocop, "autocorrect"
+            run_eval "bundle exec rubocop -a"
+          rescue
             # Do nothing
           end
 
@@ -59,40 +59,40 @@ module PlutoniumGenerators
       else
         debug "Skipping installation of #{feature}. No new versions since v#{from_version}."
       end
-    rescue StandardError => e
+    rescue => e
       exception "#{self.class.desc} failed:", e
     end
 
-    def add_gem(name, **kwargs)
+    def add_gem(name, **)
       log :add_gem, name
-      before_bundle :gem, name, **kwargs
+      before_bundle(:gem, name, **)
     end
 
     def rubocop(library = nil)
       log :rubocop, "install #{library}"
 
-      add_gem 'rubocop', group: :development, require: false
+      add_gem "rubocop", group: :development, require: false
 
       in_root do
-        rubocop_file = '.rubocop.yml'
+        rubocop_file = ".rubocop.yml"
         if File.exist?(rubocop_file)
           rubocop_def = YAML.load_file(rubocop_file)
-          rubocop_def['require'] ||= []
+          rubocop_def["require"] ||= []
         else
           rubocop_def = {
-            'require' => [],
-            'Style/FrozenStringLiteralComment' => { 'SafeAutoCorrect' => true },
-            'Style/ClassAndModuleChildren' => { 'SafeAutoCorrect' => true }
+            "require" => [],
+            "Style/FrozenStringLiteralComment" => {"SafeAutoCorrect" => true},
+            "Style/ClassAndModuleChildren" => {"SafeAutoCorrect" => true}
           }
         end
 
         if library.present?
           library = "rubocop-#{library}"
           add_gem library, group: :development, require: false
-          rubocop_def['require'] << library
+          rubocop_def["require"] << library
         end
 
-        rubocop_def['require'].uniq!
+        rubocop_def["require"].uniq!
         create_file rubocop_file, YAML.dump(rubocop_def), force: true, verbose: false
       end
     end
@@ -122,18 +122,18 @@ module PlutoniumGenerators
     end
 
     def pug(command)
-      args = options.slice('lint', 'interactive').map { |k, v| "--#{k} #{v}" }.join ' '
+      args = options.slice("lint", "interactive").map { |k, v| "--#{k} #{v}" }.join " "
       generate "pu:#{command} --pug-id=#{depth + 1} --force=#{force?} #{args}"
     end
 
     private
 
     def bundle!(run_tasks = true)
-      log :bundle, 'install'
+      log :bundle, "install"
 
       execute_tasks_before! :bundle if run_tasks
       Bundler.with_unbundled_env do
-        run 'bundle install', verbose: false
+        run "bundle install", verbose: false
       end
       execute_tasks_after! :bundle if run_tasks
     end

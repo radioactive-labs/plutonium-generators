@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Setup
@@ -8,8 +8,8 @@ module Pu
       include PlutoniumGenerators::Generator
       include PlutoniumGenerators::Installer
 
-      desc 'Setup rubocop'
-      class_option :rails, type: :boolean, default: true, desc: 'Setup rubocop for Rails'
+      desc "Setup rubocop"
+      class_option :rails, type: :boolean, default: true, desc: "Setup rubocop for Rails"
 
       def start
         install! :rubocop

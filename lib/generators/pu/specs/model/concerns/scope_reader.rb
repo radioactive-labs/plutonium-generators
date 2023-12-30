@@ -9,14 +9,14 @@ module Concerns
 
       match = ::Regexp.last_match(1)
       # https://github.com/thoughtbot/shoulda-matchers/issues/810
-      match.strip unless match.include? '.not'
+      match.strip unless match.include? ".not"
     end
 
     private
 
     def model_source_location
       @model_source_location ||= begin
-        name_parts = model_class_name.split('::')
+        name_parts = model_class_name.split("::")
         module_name = name_parts.first
         class_name = name_parts.last
 

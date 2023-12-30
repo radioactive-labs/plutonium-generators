@@ -13,7 +13,7 @@ module Concerns
         end
 
         attributes = model_class.attribute_names - (foreign_keys + %w[id created_at
-                                                                      updated_at]) - polymorphic_types_fields
+          updated_at]) - polymorphic_types_fields
 
         attributes.each_with_object({}.with_indifferent_access) do |attribute_name, hash|
           hash.merge! build_attribute(attribute_name)
@@ -38,7 +38,7 @@ module Concerns
 
     def build_attribute(attribute_name)
       column = model_class.column_for_attribute(attribute_name)
-      attribute_name_key = attribute_name.sub('_digest', '')
+      attribute_name_key = attribute_name.sub("_digest", "")
       validators = model_class.validators_on(attribute_name_key).each_with_object({}) do |v, hash|
         hash[v.kind] = v.options
       end
@@ -57,7 +57,7 @@ module Concerns
       validators = params[:validators]
       return true if validators.key?(:presence)
 
-      validators.dig(:length, :is).present? && \
+      validators.dig(:length, :is).present? &&
         !(validators.dig(:length, :allow_nil) || validators.dig(:length, :allow_blank))
     end
   end

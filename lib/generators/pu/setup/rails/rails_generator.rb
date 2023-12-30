@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Setup
@@ -8,7 +8,7 @@ module Pu
       include PlutoniumGenerators::Generator
       include PlutoniumGenerators::Installer
 
-      desc 'Setup Rails'
+      desc "Setup Rails"
 
       def start
         install! :rails
@@ -17,21 +17,21 @@ module Pu
       protected
 
       def install_v0_1_0!
-        duplicate_file 'config/environments/production.rb', 'config/environments/staging.rb'
+        duplicate_file "config/environments/production.rb", "config/environments/staging.rb"
 
-        proc_file :web, 'bundle exec rails server -p $PORT'
+        proc_file :web, "bundle exec rails server -p $PORT"
 
-        pug 'setup:dev'
+        pug "setup:dev"
 
-        pug 'setup:pg'
-        pug 'setup:redis'
-        pug 'setup:sidekiq'
+        pug "setup:pg"
+        pug "setup:redis"
+        pug "setup:sidekiq"
 
-        pug 'setup:seeds'
+        pug "setup:seeds"
 
         # Let's be honest. No one really uses this.
         # If you need this, add it back.
-        remove_gem 'jbuilder'
+        remove_gem "jbuilder"
       end
     end
   end

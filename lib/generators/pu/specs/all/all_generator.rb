@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 return unless PlutoniumGenerators.rails?
 
@@ -23,20 +23,20 @@ module Pu
         # generate_query_specs if options[:graphql_queries]
         generate_model_specs if options[:models]
         lint_models if options[:models]
-      rescue StandardError => e
-        exception 'Specs generation failed:', e
+      rescue => e
+        exception "Specs generation failed:", e
       end
 
       private
 
       def lint_models
         if lint?
-          info 'Running factory_bot:lint'
-          rake 'factory_bot:lint'
+          info "Running factory_bot:lint"
+          rake "factory_bot:lint"
         else
           info(
             "Run `rails factory_bot:lint` to validate your generated factories.\n" \
-            'Visit https://thoughtbot.github.io/factory_bot/linting-factories/summary.html for more information'
+            "Visit https://thoughtbot.github.io/factory_bot/linting-factories/summary.html for more information"
           )
         end
       end
@@ -59,7 +59,7 @@ module Pu
           generate "pu:specs:model #{model} --no-lint --no-interactive --no-bundle"
         end
 
-        success 'Model spec generation compeleted'
+        success "Model spec generation compeleted"
       end
     end
   end

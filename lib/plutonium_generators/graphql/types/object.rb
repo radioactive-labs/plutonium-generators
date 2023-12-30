@@ -8,24 +8,24 @@ module PlutoniumGenerators
 
         def repr
           @repr ||= super.merge({
-                                  fields: fields&.transform_values(&:repr)
-                                })
+            fields: fields&.transform_values(&:repr)
+          })
         end
 
         def to_graphql(depth)
           return if fields.empty?
 
-          str = ''
+          str = ""
           fields.each do |k, v|
             result = v.to_graphql(depth + 1)
             result = case v
-                     when Object
-                       " {\n#{result} #{indent('}', depth)}"
-                     else
-                       result
-                     end
+            when Object
+              " {\n#{result} #{indent("}", depth)}"
+            else
+              result
+            end
 
-            next if result.gsub(/\s/, '') == '{}'
+            next if result.gsub(/\s/, "") == "{}"
 
             str += indent(k, depth)
             str += result

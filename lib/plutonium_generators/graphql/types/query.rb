@@ -8,14 +8,14 @@ module PlutoniumGenerators
 
         def repr
           @repr ||= super.merge({
-                                  type: type&.repr
-                                }).except :fields
+            type: type&.repr
+          }).except :fields
         end
 
         def to_graphql(depth)
           str = indent "#{name} {\n", depth
           str += type.to_graphql(depth + 1)
-          str + indent('}', depth)
+          str + indent("}", depth)
         end
 
         def resolver

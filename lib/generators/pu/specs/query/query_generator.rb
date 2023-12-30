@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 return unless PlutoniumGenerators.rails?
 
@@ -9,20 +9,20 @@ module Pu
     class QueryGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
-      source_root File.expand_path('templates', __dir__)
+      source_root File.expand_path("templates", __dir__)
 
       InvalidQueryError = Class.new(StandardError)
 
       argument :name
-      class_option :schema, type: :string, default: 'AppApiSchema'
+      class_option :schema, type: :string, default: "AppApiSchema"
 
       def start
         validate_schema
         validate_resolver
 
         generate_spec
-      rescue StandardError => e
-        exception 'Query generation failed:', e
+      rescue => e
+        exception "Query generation failed:", e
       end
 
       private
@@ -45,7 +45,7 @@ module Pu
       end
 
       def generate_spec
-        spec_template = 'query_spec.rb.tt'
+        spec_template = "query_spec.rb.tt"
         spec_path = "spec/queries/#{query_name.underscore}_spec.rb"
 
         template(spec_template, spec_path, force: true)

@@ -6,8 +6,8 @@ module PlutoniumGenerators
       class Mutation < Object
         def repr
           @repr ||= super.merge({
-                                  args: @args
-                                })
+            args: @args
+          })
         end
       end
     end

@@ -53,24 +53,24 @@ module Concerns
     # rubocop:disable Metrics/AbcSize, Metrics/BlockLength
     def shoulda_matcher_for(name, validator, options)
       matcher = case validator.to_sym
-                when :presence
-                  "validate_presence_of(:#{name})"
-                when :uniqueness
-                  "validate_uniqueness_of(:#{name})"
-                when :length
-                  "validate_length_of(:#{name})"
-                when :inclusion
-                  "validate_inclusion_of(:#{name})"
-                when :numericality
-                  "validate_numericality_of(:#{name})"
-                when :phone
-                  "allow_values('+233200123456', '0200123456').for(:#{name})"
-                when :email
-                  "allow_values('email@domain.com', 'email+plusvalu@domain.com').for(:#{name})"
-                else
-                  debug "Unsupported validator: '#{validator}' for #{model_class_name}.#{name}"
-                  return
-                end
+      when :presence
+        "validate_presence_of(:#{name})"
+      when :uniqueness
+        "validate_uniqueness_of(:#{name})"
+      when :length
+        "validate_length_of(:#{name})"
+      when :inclusion
+        "validate_inclusion_of(:#{name})"
+      when :numericality
+        "validate_numericality_of(:#{name})"
+      when :phone
+        "allow_values('+233200123456', '0200123456').for(:#{name})"
+      when :email
+        "allow_values('email@domain.com', 'email+plusvalu@domain.com').for(:#{name})"
+      else
+        debug "Unsupported validator: '#{validator}' for #{model_class_name}.#{name}"
+        return
+      end
 
       options.each do |option, value|
         case option.to_sym
@@ -85,7 +85,7 @@ module Concerns
         when :maximum
           matcher = "#{matcher}.is_at_most(#{value})"
         when :is
-          matcher = validator == :numericality ? "#{matcher}.is_in(#{value})" : "#{matcher}.is_equal_to(#{value})"
+          matcher = (validator == :numericality) ? "#{matcher}.is_in(#{value})" : "#{matcher}.is_equal_to(#{value})"
         when :message
           matcher = "#{matcher}.with_message(#{serialize_string value})"
         when :scope
@@ -110,7 +110,7 @@ module Concerns
 
     # rubocop:disable Metrics/AbcSize
     def belongs_to_validation_modifiers(association)
-      modifier = ''
+      modifier = ""
 
       %i[primary_key foreign_key].each do |opt|
         value = association.options[opt]
@@ -139,7 +139,7 @@ module Concerns
 
     # rubocop:disable Naming/PredicateName, Metrics/AbcSize
     def has_one_validation_modifiers(association)
-      modifier = ''
+      modifier = ""
 
       %i[primary_key foreign_key].each do |opt|
         value = association.options[opt]
@@ -168,7 +168,7 @@ module Concerns
 
     # rubocop:disable Naming/PredicateName, Metrics/AbcSize
     def has_many_validation_modifiers(association)
-      modifier = ''
+      modifier = ""
 
       %i[primary_key foreign_key].each do |opt|
         value = association.options[opt]

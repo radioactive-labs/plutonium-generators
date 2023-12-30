@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'yaml'
-require 'erb'
-require 'open3'
-require 'fileutils'
+require "yaml"
+require "erb"
+require "open3"
+require "fileutils"
 
 module PlutoniumGenerators
   module Concerns
@@ -19,8 +19,8 @@ module PlutoniumGenerators
         log :set_ruby_version!, PlutoniumGenerators::RUBY_VERSION
 
         in_root do
-          create_file '.ruby-version', PlutoniumGenerators::RUBY_VERSION, force: true, verbose: false
-          gsub_file 'Gemfile', /^ruby ["'].*["']/, "ruby '~> #{PlutoniumGenerators::RUBY_VERSION}'", verbose: false
+          create_file ".ruby-version", PlutoniumGenerators::RUBY_VERSION, force: true, verbose: false
+          gsub_file "Gemfile", /^ruby ["'].*["']/, "ruby '~> #{PlutoniumGenerators::RUBY_VERSION}'", verbose: false
         end
       end
 
@@ -40,22 +40,22 @@ module PlutoniumGenerators
         in_root do
           begin
             # Create a temp gemfile
-            File.rename('Gemfile', 'Gemfile.bak')
-            File.write('Gemfile', '')
+            File.rename("Gemfile", "Gemfile.bak")
+            File.write("Gemfile", "")
             # Generate the directive
             super
             # Get the generated directive
             directive = gemfile.strip
           ensure
             # Restore our gemfile
-            File.delete 'Gemfile'
-            File.rename 'Gemfile.bak', 'Gemfile'
+            File.delete "Gemfile"
+            File.rename "Gemfile.bak", "Gemfile"
           end
 
           pattern = /^# gem ['"]#{name}['"].*/
           if gemfile.match(pattern)
             # Replace commented out directive
-            gsub_file('Gemfile', pattern, directive)
+            gsub_file("Gemfile", pattern, directive)
             break
           end
 
@@ -64,20 +64,20 @@ module PlutoniumGenerators
 
           # Insert the new directive
           if groups != []
-            str = groups.sort.map(&:inspect).join(', ')
+            str = groups.sort.map(&:inspect).join(", ")
             after_sentinel = "group #{str} do\n"
 
-            unless File.read('Gemfile').match?(/^#{after_sentinel}/)
-              inject_into_file 'Gemfile', "\n#{after_sentinel}end\n"
+            unless File.read("Gemfile").match?(/^#{after_sentinel}/)
+              inject_into_file "Gemfile", "\n#{after_sentinel}end\n"
             end
           else
             after_sentinel = "# Project gems\n\n"
-            unless File.read('Gemfile').match?(/^#{after_sentinel}/)
-              inject_into_file 'Gemfile', "\n#{after_sentinel}", after: /^ruby .*\n/
+            unless File.read("Gemfile").match?(/^#{after_sentinel}/)
+              inject_into_file "Gemfile", "\n#{after_sentinel}", after: /^ruby .*\n/
             end
           end
 
-          inject_into_file 'Gemfile', "#{directive}\n", after: /^#{after_sentinel}/
+          inject_into_file "Gemfile", "#{directive}\n", after: /^#{after_sentinel}/
         end
       end
 
@@ -90,7 +90,7 @@ module PlutoniumGenerators
       #
       def remove_gem(gem)
         log :remove_gem, gem
-        gsub_file 'Gemfile', /(:?^.*#.*\n)*.*gem ['"]#{gem}['"].*\n/, '', verbose: false
+        gsub_file "Gemfile", /(:?^.*#.*\n)*.*gem ['"]#{gem}['"].*\n/, "", verbose: false
       end
 
       #
@@ -104,10 +104,10 @@ module PlutoniumGenerators
         log :docker_compose, source
 
         in_root do
-          compose_file = 'docker-compose.yml'
+          compose_file = "docker-compose.yml"
           compose_definition = YAML.load_file(compose_file) if File.exist?(compose_file)
           compose_definition ||= {
-            version: '3.7',
+            version: "3.7",
             services: {}
           }
           compose_definition.deep_stringify_keys!
@@ -132,7 +132,7 @@ module PlutoniumGenerators
 
         in_root do
           FileUtils.cp src, dest
-        rescue StandardError => e
+        rescue => e
           exception "An error occurred while copying the file '#{src}' to '#{dest}'", e
         end
       end
@@ -148,12 +148,12 @@ module PlutoniumGenerators
       #
       def proc_file(proc, command, env: nil)
         directive = "#{proc}: #{command}"
-        filename = env ? "Procfile.#{env}" : 'Procfile'
+        filename = env ? "Procfile.#{env}" : "Procfile"
 
         log :proc_file, directive
 
         in_root do
-          File.write(filename, '') unless File.exist? filename
+          File.write(filename, "") unless File.exist? filename
 
           pattern = /^#{proc}:.*/
           if File.read(filename).match?(pattern)
@@ -187,12 +187,12 @@ module PlutoniumGenerators
 
         in_root do
           def replace_existing(file, data)
-            gsub_file file, Regexp.new(".*#{data.split('=').first.strip}.*=.*\n"), data, verbose: false
+            gsub_file file, Regexp.new(".*#{data.split("=").first.strip}.*=.*\n"), data, verbose: false
           end
 
           if options[:env].nil?
             data = optimize_indentation(data, 4)
-            file = 'config/application.rb'
+            file = "config/application.rb"
             replace_existing file, data
             break if File.read(file).match? regexify_config(data)
 
@@ -206,7 +206,7 @@ module PlutoniumGenerators
               next if File.read(file).match? regexify_config(data)
 
               inject_into_file file, data, before: /^end/,
-                                           verbose: false
+                verbose: false
             end
           end
         end
@@ -229,21 +229,21 @@ module PlutoniumGenerators
 
         in_root do
           def replace_existing(file, data)
-            gsub_file file, Regexp.new(".*#{data.split('=').first.strip}.*=.*\n"), data, verbose: false
+            gsub_file file, Regexp.new(".*#{data.split("=").first.strip}.*=.*\n"), data, verbose: false
           end
 
           def ensure_sentinel(file, sentinel)
             return if File.read(file).match?(/^#{Regexp.quote sentinel}/)
 
-            inject_into_file file, "\n#{sentinel}#{optimize_indentation('end', 4)}", before: /^  end\nend/,
-                                                                                     verbose: false
+            inject_into_file file, "\n#{sentinel}#{optimize_indentation("end", 4)}", before: /^  end\nend/,
+              verbose: false
           end
 
           sentinel = optimize_indentation("config.generators do |g|\n", 4)
 
           if options[:env].nil?
             data = optimize_indentation(data, 6)
-            file = 'config/application.rb'
+            file = "config/application.rb"
             replace_existing file, data
             break if File.read(file).match? regexify_config(data)
 
@@ -276,7 +276,7 @@ module PlutoniumGenerators
           # Doing this one by one so that duplication detection during insertion will work
           directives.each do |directive|
             log :gitignore, directive
-            insert_into_file '.gitignore', "#{directive}\n", verbose: false
+            insert_into_file ".gitignore", "#{directive}\n", verbose: false
           end
         end
       end
@@ -322,7 +322,7 @@ module PlutoniumGenerators
       #
       def template_eval(source)
         source = File.binread File.expand_path(find_in_source_paths(source.to_s))
-        ERB.new(source, trim_mode: '-').result(binding)
+        ERB.new(source, trim_mode: "-").result(binding)
       end
 
       #
@@ -345,7 +345,7 @@ module PlutoniumGenerators
       #
       def gemfile
         in_root do
-          File.read('Gemfile')
+          File.read("Gemfile")
         end
       end
     end

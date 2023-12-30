@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../../plutonium_generators', __dir__)
+require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Setup
@@ -8,7 +8,7 @@ module Pu
       include PlutoniumGenerators::Generator
       include PlutoniumGenerators::Installer
 
-      desc 'Setup Redis'
+      desc "Setup Redis"
 
       def start
         install! :redis
@@ -18,8 +18,8 @@ module Pu
 
       def install_v0_1_0!
         docker_compose :redis
-        add_gem 'redis'
-        after_bundle :environment, 'config.cache_store = :redis_cache_store', env: %i[production staging]
+        add_gem "redis"
+        after_bundle :environment, "config.cache_store = :redis_cache_store", env: %i[production staging]
       end
     end
   end

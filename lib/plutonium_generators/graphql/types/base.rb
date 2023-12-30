@@ -14,13 +14,13 @@ module PlutoniumGenerators
               resolve context, type_hash[:type], depth
             else
               case type_hash[:kind]
-              when 'OBJECT'
+              when "OBJECT"
                 obj = Object.new context, context[:type_schema][type_hash[:name]]
                 obj.send :resolve_dependencies, depth + 1
                 obj
-              when 'SCALAR'
+              when "SCALAR"
                 Scalar.new context, type_hash
-              when 'NON_NULL', 'LIST'
+              when "NON_NULL", "LIST"
                 resolve context, type_hash[:ofType], depth
               when nil
                 nil
@@ -69,7 +69,7 @@ module PlutoniumGenerators
         private
 
         def indent(str, depth)
-          ((' ' * 2) * (depth + 1)) + str
+          ((" " * 2) * (depth + 1)) + str
         end
       end
     end

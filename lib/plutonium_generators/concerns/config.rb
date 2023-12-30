@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'yaml'
+require "yaml"
 
 module PlutoniumGenerators
   module Concerns
     module Config
       def write_config(scope, **kwargs)
-        write_config! config.deep_merge({ scope => kwargs })
+        write_config! config.deep_merge({scope => kwargs})
       end
 
       def read_config(scope, key, default: nil)
@@ -32,7 +32,7 @@ module PlutoniumGenerators
       end
 
       def config_filename
-        '.pu'
+        ".pu"
       end
     end
   end

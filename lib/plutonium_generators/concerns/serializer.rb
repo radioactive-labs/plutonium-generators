@@ -16,7 +16,7 @@ module PlutoniumGenerators
         when Enumerable
           serialize_enumerable value
         when nil
-          'nil'
+          "nil"
         else
           # debug "Unable to serialize a value '#{value}:#{value.class}'"
           value
@@ -32,7 +32,7 @@ module PlutoniumGenerators
       end
 
       def serialize_enumerable(enum)
-        "[#{enum.entries.map { |val| serialize_value val }.join ', '}]"
+        "[#{enum.entries.map { |val| serialize_value val }.join ", "}]"
       end
     end
   end

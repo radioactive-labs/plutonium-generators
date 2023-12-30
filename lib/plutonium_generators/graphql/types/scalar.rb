@@ -5,7 +5,7 @@ module PlutoniumGenerators
     module Types
       class Scalar < Base
         def to_graphql(_depth)
-          ''
+          ""
         end
       end
     end

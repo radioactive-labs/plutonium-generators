@@ -25,15 +25,15 @@ module Concerns
       when :string, :text, :citext
         factory_for_text_attribute name, params
       when :datetime
-        'DateTime.now'
+        "DateTime.now"
       when :date
-        'Date.today'
+        "Date.today"
       when :integer
-        'Faker::Number.number'
+        "Faker::Number.number"
       when :boolean
-        'Faker::Boolean.boolean'
+        "Faker::Boolean.boolean"
       when :json, :jsonb
-        'JSON.parse Faker::Json.shallow_json'
+        "JSON.parse Faker::Json.shallow_json"
       else
         debug "factory_for_attribute - unsupported column type: '#{column.type}' for #{model_class_name}.#{name}"
       end
@@ -44,7 +44,7 @@ module Concerns
       unique = ActiveRecord::Base.connection.indexes(table_name).any? do |idx|
         idx.columns.include?(name) && idx.unique
       end
-      modifier = '.unique' if unique
+      modifier = ".unique" if unique
 
       case name
       when /email/
@@ -54,7 +54,7 @@ module Concerns
       when /name/
         factory_for_name_attribute name
       when /url/
-        'Faker::Internet.url'
+        "Faker::Internet.url"
       else
         "Faker::String.random(length: #{len})"
       end
@@ -65,11 +65,11 @@ module Concerns
       when /user/
         "Faker::Internet#{modifier}.username(specifier: #{len})"
       when /first/
-        'Faker::Name.first_name'
+        "Faker::Name.first_name"
       when /last/, /other/, /middle/
-        'Faker::Name.last_name'
+        "Faker::Name.last_name"
       else
-        'Faker::Name.name'
+        "Faker::Name.name"
       end
     end
 
@@ -83,7 +83,7 @@ module Concerns
         return serialize_number(validator[:equal_to]) if validator[:equal_to].present?
 
         if validator[:other_than].present?
-          debug 'We currently cannot guarantee factories when `other_than`` is used on `numericality` validations'
+          debug "We currently cannot guarantee factories when `other_than`` is used on `numericality` validations"
         end
 
         min = nil
@@ -111,7 +111,7 @@ module Concerns
     def factory_from_attribute_default(params)
       column = params[:column]
 
-      return 'nil' unless column.has_default?
+      return "nil" unless column.has_default?
 
       case column.type
       when :string, :text, :citext
@@ -140,7 +140,7 @@ module Concerns
       min = [is_len, min_len, 0].compact.first
       max = [is_len, max_len, col_limit, 50].compact.first
 
-      min == max ? max : Range.new(min, max)
+      (min == max) ? max : Range.new(min, max)
     end
   end
 end
