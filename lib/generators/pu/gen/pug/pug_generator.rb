@@ -11,8 +11,8 @@ module Pu
       class_option :desc, type: :string, default: false, desc: "Description of your pug"
 
       def start
-        template "pug.rb.tt", "lib/generators/pu/#{pug_name.underscore}.rb"
-        create_file "lib/generators/pu/#{pug_name.underscore}/templates/.keep"
+        template "pug.rb.tt", "lib/generators/pu/#{pug_path}/#{pug_class.underscore}.rb"
+        create_file "lib/generators/pu/#{pug_path}/templates/.keep"
       end
 
       def rubocop
@@ -22,7 +22,19 @@ module Pu
       protected
 
       def pug_name
-        name.split(":").map(&:classify).join("::")
+        name.split(":").map(&:camelize).join("::")
+      end
+
+      def pug_path
+        pug_name.underscore
+      end
+
+      def pug_module
+        pug_name.deconstantize
+      end
+
+      def pug_class
+        "#{pug_name.demodulize}Generator"
       end
     end
   end
