@@ -172,11 +172,11 @@ module Pu
       end
 
       def resource_name
-        resource_name ||= name.classify
+        @resource_name ||= name.classify
       end
 
       def resource_name_plural
-        resource_name_plural ||= resource_name.pluralize
+        @resource_name_plural ||= resource_name.pluralize
       end
 
       def resource_class

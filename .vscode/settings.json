@@ -28,5 +28,8 @@
   "files.associations": {
     "*.html.erb": "erb",
     "Gemfile": "ruby",
+  },
+  "rubyLsp.enabledFeatures": {
+    "diagnostics": false, // uses rubocop. our projects uses standard
   }
 }

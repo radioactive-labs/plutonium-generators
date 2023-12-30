@@ -9,6 +9,7 @@
     "jbockle.jbockle-format-files",
     "esbenp.prettier-vscode",
     "pavlitsky.yard",
-    "testdouble.vscode-standard-ruby"
+    "testdouble.vscode-standard-ruby",
+    "shopify.ruby-lsp"
   ]
 }
