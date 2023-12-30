@@ -191,5 +191,15 @@ module PlutoniumGenerators
     def root_pug?
       depth == 0
     end
+
+    # def process(cmd)
+    #   stdout, stderr, status = Open3.capture3(cmd + ";")
+    #   case status.exitstatus
+    #   when 0
+    #     stdout
+    #   else
+    #     raise stderr
+    #   end
+    # end
   end
 end
