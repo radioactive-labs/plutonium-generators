@@ -128,7 +128,7 @@ module Pu
       end
 
       def safely_underscore(value)
-        value.to_s.underscore.gsub('/', '_')
+        value.to_s.underscore.tr('/', '_')
       end
     end
   end

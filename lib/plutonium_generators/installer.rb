@@ -25,7 +25,7 @@ module PlutoniumGenerators
 
       from_version = read_config(:installed, feature, default: '0.0.0')
       versions = methods.map do |m|
-        m.to_s.match(/install_v([\d_]+)/)&.[](1)&.gsub('_', '.')
+        m.to_s.match(/install_v([\d_]+)/)&.[](1)&.tr('_', '.')
       end
       versions = versions.select do |version|
         force? || SemanticRange.satisfies?(version, ">#{from_version}")
@@ -34,7 +34,7 @@ module PlutoniumGenerators
       if versions.any?
         versions.each do |version|
           log :install!, "#{feature} v#{version}"
-          send "install_v#{version.gsub('.', '_')}!".to_sym
+          send "install_v#{version.tr('.', '_')}!".to_sym
         end
 
         installed_version = versions.last

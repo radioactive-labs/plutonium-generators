@@ -1,0 +1,8 @@
+---
+require:
+  - rubocop-performance
+  - rubocop-rspec
+Style/FrozenStringLiteralComment:
+  SafeAutoCorrect: true
+Style/ClassAndModuleChildren:
+  SafeAutoCorrect: true
