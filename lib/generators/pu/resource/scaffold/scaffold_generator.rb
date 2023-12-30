@@ -40,10 +40,12 @@ module Pu
         return if route_exists && skip_existing?
 
         if resource_module_underscored.present?
-          module_config = indent(
-            # underscore in the path prevents conflicts with root level model controllers
-            "module: '#{resource_module_underscored}', controller: '#{resource_attribute_plural}', path: '_/#{resources_path}' ", 40
-          )
+          indentation = "  resources :#{resource_name_plural_underscored}, ".size
+          module_config = [
+            "module: '#{resource_module_underscored}'",
+            "controller: '#{resource_attribute_plural}'",
+            "path: '#{resources_path}'"
+          ].map { |c| indent c, indentation }.join(",\n")
           module_config = ",\n#{module_config}"
         end
         route = <<~TILDE
@@ -147,10 +149,12 @@ module Pu
           matcher = lambda do |assoc|
             assoc_class = assoc.class_name.constantize
             assoc_class == Entity || assoc_class < Entity
+          rescue StandardError
+            false
           end
 
           assoc = source_class.reflect_on_all_associations(:belongs_to).select(&matcher).first
-          assoc = source_class.reflect_on_all_associations(:has_one).select(&matcher).first unless assoc.present?
+          assoc ||= source_class.reflect_on_all_associations(:has_one).select(&matcher).first
           assoc
         end
       end
