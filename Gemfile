@@ -8,5 +8,5 @@ gemspec
 gem "htmlbeautifier"
 gem "rake", "~> 12.0"
 gem "rspec", "~> 3.0"
-gem "standard"
+gem "standard", require: false
 gem "solargraph"

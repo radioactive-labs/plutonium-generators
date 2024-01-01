@@ -49,7 +49,7 @@ module PlutoniumGenerators
 
           begin
             log :rubocop, "autocorrect"
-            run_eval "bundle exec rubocop -a"
+            run_eval "bundle exec standardrb --fix"
           rescue
             # Do nothing
           end

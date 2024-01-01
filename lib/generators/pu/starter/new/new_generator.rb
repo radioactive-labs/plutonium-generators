@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-require "open3"
 require File.expand_path("../../../../plutonium_generators", __dir__)
 
+return if PlutoniumGenerators.rails?
+
+require "open3"
 module Pu
   module Starter
     class NewGenerator < Rails::Generators::Base
@@ -31,7 +33,7 @@ module Pu
         cmd = "rails _#{rails_version}_ new #{project_dir} --name=#{name}Mango " \
               " --skip-action-mailbox --skip-action-text --skip-active-storage --skip-action-cable --skip-jbuilder" \
               " --javascript=esbuild --css=bootstrap" \
-              " --force"
+              " -m #{rails_template_path}"
         Bundler.unbundled_system cmd
       end
 
@@ -44,7 +46,7 @@ module Pu
       end
 
       def rails_template_path
-        File.expand_path("starter_template.rb", __dir__)
+        File.expand_path("rails/starter_template.rb", __dir__)
       end
     end
   end
