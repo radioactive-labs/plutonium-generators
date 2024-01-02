@@ -8,7 +8,7 @@ module Pu
       desc "Create a new pug"
 
       argument :name
-      class_option :desc, type: :string, default: false, desc: "Description of your pug"
+      class_option :desc, type: :string, desc: "Description of your pug"
 
       def start
         template "pug.rb.tt", "lib/generators/pu/#{pug_path}/#{pug_class.underscore}.rb"
