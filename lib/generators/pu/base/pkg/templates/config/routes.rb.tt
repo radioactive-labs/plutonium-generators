@@ -1,2 +1,5 @@
+<%= package_name %>::Engine.draw_resource_routes
+
 # <%= package_name %>::Engine.routes.draw do
+#   # Draw custom routes here...
 # end

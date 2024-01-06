@@ -15,14 +15,17 @@ module Pu
       class_option :app, type: :boolean, desc: "Create the package as an app"
 
       def start
-        template "lib/engine.rb", "packages/#{package_path}/lib/engine.rb"
-        template "config/routes.rb", "packages/#{package_path}/config/routes.rb"
-        create_file "packages/#{package_path}/app/controllers/#{package_path}/.keep"
-        create_file "packages/#{package_path}/app/views/#{package_path}/.keep"
-        create_file "packages/#{package_path}/app/models/#{package_path}/.keep" unless options[:app]
+        template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
+        create_file "packages/#{package_namespace}/app/controllers/#{package_namespace}/.keep"
+        create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
 
-        insert_into_file "config/packages.rb",
-          "require_relative \"../packages/#{package_path}/lib/engine\"\n"
+        if options[:app]
+          template "config/routes.rb", "packages/#{package_namespace}/config/routes.rb"
+        else
+          create_file "packages/#{package_namespace}/app/models/#{package_namespace}/.keep"
+        end
+
+        insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e
         exception "#{self.class} failed:", e
       end
@@ -35,7 +38,7 @@ module Pu
         package_name.classify
       end
 
-      def package_path
+      def package_namespace
         package_name.underscore
       end
 
