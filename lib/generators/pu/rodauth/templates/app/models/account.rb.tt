@@ -1,0 +1,40 @@
+<% if defined?(ActiveRecord::Railtie) -%>
+class <%= table_prefix.camelize %> < ApplicationRecord
+  include Rodauth::Rails.model<%= "(:#{table_prefix})" unless primary? %>
+  # pu:add concerns above.
+
+  # pu:add model configurations above.
+
+  # pu:add belongs_to associations above.
+
+  # pu:add has_one associations above.
+
+  # pu:add has_many associations above.
+
+  # pu:add attachments above.
+
+<% if ActiveRecord.version >= Gem::Version.new("7.0") -%>
+  enum :status, unverified: 1, verified: 2, closed: 3
+<% else -%>
+  enum status: { unverified: 1, verified: 2, closed: 3 }
+<% end -%>
+  # pu:add misc attribute macros above.
+
+  # pu:add scopes above.
+
+  validates :email, presence: true
+  # pu:add validations above.
+
+  # pu:add callbacks above.
+
+  # pu:add delegations above.
+
+  # pu:add methods above.
+end
+<% else -%>
+class <%= table_prefix.camelize %> < Sequel::Model
+  include Rodauth::Rails.model
+  plugin :enum
+  enum :status, unverified: 1, verified: 2, closed: 3
+end
+<% end -%>
