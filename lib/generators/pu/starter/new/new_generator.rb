@@ -30,7 +30,7 @@ module Pu
       end
 
       def create_starter_project
-        cmd = "rails _#{rails_version}_ new #{project_dir} --name=#{name}Mango " \
+        cmd = "rails _#{rails_version}_ new #{project_dir} --name=#{name} " \
               " --skip-action-mailbox --skip-action-text --skip-active-storage --skip-action-cable --skip-jbuilder" \
               " --javascript=esbuild --css=bootstrap" \
               " -m #{rails_template_path}"

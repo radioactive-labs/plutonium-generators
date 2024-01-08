@@ -1,5 +1,7 @@
 module <%= package_name %>
   class Engine < Rails::Engine
     include Plutonium::<%= package_type %>
+
+    # Include directives after this line
   end
 end

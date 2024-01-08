@@ -1,0 +1,5 @@
+module Core
+  class ResourcePresenter
+    include Plutonium::Core::ResourcePresenter
+  end
+end
