@@ -12,18 +12,16 @@
     80,
     120
   ],
-  "solargraph.formatting": true,
+  "standardRuby.mode": "enableViaGemfile",
+  "standardRuby.commandPath": "${userHome}/.rbenv/shims/standardrb",
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
   },
   "[ruby]": {
     "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
-    "editor.formatOnSave": true
   },
   "[erb]": {
     "editor.defaultFormatter": "aliariff.vscode-erb-beautify",
-    "editor.formatOnSave": false
   },
   "files.associations": {
     "*.html.erb": "erb",

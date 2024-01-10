@@ -12,7 +12,7 @@ module Pu
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Create a new plutonium starter app"
+      desc "Create a new plutonium starter project"
 
       argument :name
 
@@ -32,6 +32,7 @@ module Pu
       def create_starter_project
         cmd = "rails _#{rails_version}_ new #{project_dir} --name=#{name} " \
               " --skip-action-mailbox --skip-action-text --skip-active-storage --skip-action-cable --skip-jbuilder" \
+              " --skip-test --skip-system-test" \
               " --javascript=esbuild --css=bootstrap" \
               " -m #{rails_template_path}"
         Bundler.unbundled_system cmd
@@ -46,7 +47,7 @@ module Pu
       end
 
       def rails_template_path
-        File.expand_path("rails/starter_template.rb", __dir__)
+        File.expand_path("starter_rails_template.rb", __dir__)
       end
     end
   end

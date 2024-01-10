@@ -7,5 +7,10 @@ after_bundle do
   git commit: %( -m 'initial commit' )
 
   generate "pu:setup:rails"
+  git add: "."
+  git commit: %( -m 'setup rails' )
+
+  generate "pu:base:install"
+  git add: "."
   git commit: %( -m 'setup plutonium starter' )
 end

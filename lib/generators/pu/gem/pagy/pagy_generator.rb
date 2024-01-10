@@ -2,19 +2,22 @@
 
 require File.expand_path("../../../../plutonium_generators", __dir__)
 
-return unless PlutoniumGenerators.rails?
-
 module Pu
-  module Starter
-    class BaseGenerator < Rails::Generators::Base
+  module Gem
+    class PagyGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Set up the base requirements for Plutonium"
+      desc "Install Pagy"
 
       def start
-        invoke "pu:base:core"
+        Bundler.with_unbundled_env do
+          run "bundle add pagy"
+        end
+
+        generate "simple_form:install", []
+        directory "config"
       rescue => e
         exception "#{self.class} failed:", e
       end
