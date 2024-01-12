@@ -1,0 +1,5 @@
+<% module_namespacing do -%>
+class <%= class_name.pluralize %>Controller < Core::ResourceController
+  controller_for ::<%= class_name %>
+end
+<% end %>

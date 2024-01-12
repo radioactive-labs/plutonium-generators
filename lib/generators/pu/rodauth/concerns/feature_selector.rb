@@ -20,7 +20,7 @@ module Pu
             default_description = "[FEATURE]#{modifier} #{feature}"
             description = opts[:desc] || default_description
 
-            base.define_method "#{feature}?" do
+            base.define_method :"#{feature}?" do
               feature_selected?(feature)
             end
 
@@ -69,7 +69,7 @@ module Pu
           # Append them to all the available options from our configuration
           valid_options = configuration.keys.map(&:to_sym).concat extra_options
           # Index map the list with the selection value
-          opts = valid_options.map { |opt| [opt, send("#{opt}?".to_sym)] }.to_h.compact
+          opts = valid_options.map { |opt| [opt, send(:"#{opt}?")] }.to_h.compact
           # True only options. We don't care if they are false.
           %i[api_only force skip pretend quiet].each do |key|
             next unless options[key]
@@ -81,7 +81,7 @@ module Pu
         end
 
         def all_selected
-          @all_selected ||= configuration.keys.select { |feature| send("#{feature}?") }
+          @all_selected ||= configuration.keys.select { |feature| send(:"#{feature}?") }
         end
 
         def selected_features

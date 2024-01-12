@@ -34,7 +34,7 @@ module PlutoniumGenerators
       if versions.any?
         versions.each do |version|
           log :install!, "#{feature} v#{version}"
-          send "install_v#{version.tr(".", "_")}!".to_sym
+          send :"install_v#{version.tr(".", "_")}!"
         end
 
         installed_version = versions.last
@@ -141,7 +141,7 @@ module PlutoniumGenerators
     def add_task(event, action, task)
       log :add_task, "#{event} #{action}: #{task}"
 
-      key = "tasks_#{event}".to_sym
+      key = :"tasks_#{event}"
       tasks = read_config(key, action, default: [])
       tasks << task
       write_config(key, action => tasks)
@@ -150,7 +150,7 @@ module PlutoniumGenerators
     def execute_tasks!(event, action)
       log :execute_tasks!, "#{event} #{action}"
 
-      key = "tasks_#{event}".to_sym
+      key = :"tasks_#{event}"
       tasks = read_config(key, action, default: [])
       tasks.each do |a|
         task = a[0]

@@ -1,4 +1,0 @@
-module Core
-  class ResourceContext < Plutonium::Core::ResourceContext
-  end
-end

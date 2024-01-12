@@ -17,13 +17,7 @@ module Pu
         gem "plutonium", path: "/Users/stefan/code/plutonium/starters/plutonium/"
 
         setup_packaging_system
-
-        invoke "pu:base:core"
-        invoke "pu:gem:simple_form"
-        invoke "pu:gem:pagy"
-        invoke "pu:gem:rabl"
-
-        copy_file "lib/templates/active_record/model/model.rb.tt"
+        install_required_gems
       rescue => e
         exception "#{self.class} failed:", e
       end
@@ -33,10 +27,14 @@ module Pu
       def setup_packaging_system
         create_file "config/packages.rb", skip: true
         insert_into_file "config/application.rb", "\nrequire_relative \"packages\"\n", after: /Bundler\.require.*\n/
+        insert_into_file "config/application.rb", indent("Plutonium.configure_rails config\n\n", 4), after: /.*< Rails::Application\n/
+      end
 
-        # Ensures app packages are booted after normal packages
-        config = "config.railties_order += Rails::Engine.descendants.select { |engine| engine.include? Plutonium::App }"
-        environment config
+      def install_required_gems
+        invoke "pu:base:core"
+        invoke "pu:gem:simple_form"
+        invoke "pu:gem:pagy"
+        invoke "pu:gem:rabl"
       end
     end
   end

@@ -1,0 +1,21 @@
+<% module_namespacing do -%>
+class <%= class_name %>Presenter < Core::ResourcePresenter
+  private
+
+  def collection_fields
+    [:name]
+  end
+
+  def detail_fields
+    [:name]
+  end
+
+  def form_inputs
+    [:name]
+  end
+
+  def associations_list
+    []
+  end
+end
+<% end -%>

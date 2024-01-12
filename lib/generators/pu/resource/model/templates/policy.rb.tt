@@ -1,0 +1,13 @@
+<% module_namespacing do -%>
+class <%= class_name %>Policy < Core::ResourcePolicy
+  class Scope
+    include Plutonium::Policy::Scope
+
+    def resolve
+      scope = ::<%= class_name %>.all
+      scope = @context.parent.<%= class_name.underscore.pluralize.tr("/", "_") %> if @context.parent.present?
+      scope
+    end
+  end
+end
+<% end -%>

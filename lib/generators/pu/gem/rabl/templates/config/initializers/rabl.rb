@@ -42,19 +42,19 @@ module Rabl
 
       lookup_proc = lambda do |partial|
         context_scope.lookup_context.find(file, context_scope.lookup_context.prefixes, partial, [],
-                                          { formats: [source_format] })
+          {formats: [source_format]})
       end
       template = begin
         lookup_proc.call(false)
-      rescue StandardError
+      rescue
         nil
       end
       template ||= begin
         lookup_proc.call(true)
-      rescue StandardError
+      rescue
         nil
       end
-      template.identifier if template
+      template&.identifier
     end
   end
 end

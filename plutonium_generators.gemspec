@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "factory_bot-awesome_linter"
+  spec.add_dependency "activerecord"
   spec.add_dependency "railties"
   spec.add_dependency "semantic_range"
 end
