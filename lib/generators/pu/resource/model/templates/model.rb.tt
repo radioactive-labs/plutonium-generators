@@ -3,7 +3,7 @@
 require_relative "../<%= class_path.last.underscore %>"
 
 <% end -%>
-class <%= class_name %> < Core::ResourceRecord
+class <%= class_name %> < ResourceRecord
   # pu:add concerns above.
 
   # pu:add model configurations above.

@@ -31,7 +31,7 @@ module Pu
       end
 
       def install_required_gems
-        invoke "pu:base:core"
+        invoke "pu:base:reactor"
         invoke "pu:gem:simple_form"
         invoke "pu:gem:pagy"
         invoke "pu:gem:rabl"

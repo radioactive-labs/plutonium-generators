@@ -31,26 +31,9 @@ module Pu
 
       def name
         @pu_name ||= begin
-          select_package
-          [main_app? ? nil : package, super.underscore].compact.join "/"
+          select_destination_package
+          [destination_main_app? ? nil : destination_package, super.underscore].compact.join "/"
         end
-      end
-
-      def select_package
-        packages = ["main_app"] + Dir["packages/*"].map { |dir| dir.gsub "packages/", "" }
-        unless packages.include?(package)
-          @package = ask("Select package", default: "main_app", limited_to: packages)
-        end
-
-        self.destination_root = "packages/#{package}" unless main_app?
-      end
-
-      def main_app?
-        package == "main_app"
-      end
-
-      def package
-        @package || options[:package]
       end
     end
   end

@@ -3,17 +3,26 @@
 require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
-  module Base
-    class ReactorGenerator < Rails::Generators::Base
+  module Pkg
+    class AppGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Creates the reactor package"
+      desc "Create a plutonium app package"
+
+      argument :name
 
       def start
+        validate_package_name package_name
+
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
-        directory "app", "packages/#{package_namespace}/app"
+        template "config/routes.rb", "packages/#{package_namespace}/config/routes.rb"
+
+        %w[controllers interactions models policies presenters].each do |dir|
+          directory "app/#{dir}", "packages/#{package_namespace}/app/#{dir}/#{package_namespace}"
+        end
+        create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
 
         insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e
@@ -23,7 +32,7 @@ module Pu
       private
 
       def package_name
-        "Reactor"
+        name.classify + "App"
       end
 
       def package_namespace
@@ -31,7 +40,7 @@ module Pu
       end
 
       def package_type
-        "Package"
+        "App"
       end
     end
   end

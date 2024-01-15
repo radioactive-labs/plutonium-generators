@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activerecord"
   spec.add_dependency "railties"
   spec.add_dependency "semantic_range"
+  spec.add_dependency "tty-prompt"
 end

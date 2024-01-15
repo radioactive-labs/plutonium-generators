@@ -3,16 +3,15 @@
 require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
-  module Base
-    class PkgGenerator < Rails::Generators::Base
+  module Pkg
+    class FeatureGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Create a plutonium package"
+      desc "Create a plutonium feature package"
 
       argument :name
-      class_option :app, type: :boolean, desc: "Create the package as an app. Defaults to creating a feature."
 
       def start
         validate_package_name package_name
@@ -20,14 +19,7 @@ module Pu
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
         create_file "packages/#{package_namespace}/app/controllers/#{package_namespace}/.keep"
         create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
-
-        if options[:app]
-          template "config/routes.rb", "packages/#{package_namespace}/config/routes.rb"
-          # insert_into_file "config/routes.rb", "\n mount #{package_name}::Engine, at: \"/#{name.underscore}\"", before: /\n$end/
-          route "mount #{package_name}::Engine, at: \"/#{name.underscore}\""
-        else
-          create_file "packages/#{name.underscore}/app/models/#{package_namespace}/.keep"
-        end
+        create_file "packages/#{name.underscore}/app/models/#{package_namespace}/.keep"
 
         insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e
@@ -37,8 +29,7 @@ module Pu
       private
 
       def package_name
-        suffix = options[:app] ? "App" : ""
-        name.classify + suffix
+        name.classify
       end
 
       def package_namespace
@@ -46,7 +37,7 @@ module Pu
       end
 
       def package_type
-        options[:app] ? "App" : "Feature"
+        "Feature"
       end
     end
   end

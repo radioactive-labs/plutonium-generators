@@ -1,0 +1,18 @@
+module <%= package_name %>
+  module ResourceController
+    extend ActiveSupport::Concern
+
+    included do
+      prepend_view_path <%= package_name %>::Engine.paths["app/views"].first
+    end
+
+    def resource_presenter(resource_class)
+      presenter_class = "<%= package_name %>::#{resource_class}Presenter".constantize
+      presenter_class.new resource_context, resource_class
+    end
+
+    def policy_namespace(scope)
+      [:<%= package_namespace %>, scope]
+    end
+  end
+end

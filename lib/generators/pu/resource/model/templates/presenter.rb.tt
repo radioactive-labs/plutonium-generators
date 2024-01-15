@@ -1,5 +1,5 @@
 <% module_namespacing do -%>
-class <%= class_name %>Presenter < Core::ResourcePresenter
+class <%= class_name %>Presenter < ResourcePresenter
   private
 
   def collection_fields

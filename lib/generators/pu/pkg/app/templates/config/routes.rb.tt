@@ -3,3 +3,8 @@
 # <%= package_name %>::Engine.routes.draw do
 #   # Draw custom routes here...
 # end
+
+# mount our app engine
+Rails.application.routes.draw do
+  mount <%= package_name %>::Engine, at: "/<%= name.underscore %>"
+end
