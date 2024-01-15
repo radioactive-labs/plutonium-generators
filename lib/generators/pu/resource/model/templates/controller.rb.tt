@@ -1,5 +1,5 @@
 <% module_namespacing do -%>
-class <%= class_name.pluralize %>Controller < ResourceController
+class <%= class_name.pluralize %>Controller < <%= package_name %>::ResourceController
   controller_for ::<%= class_name %>
 end
 <% end -%>

@@ -33,17 +33,34 @@ module PlutoniumGenerators
 
     def available_packages
       @available_packages ||= begin
-        packages = ["main_app"] + Dir["packages/*"].map { |dir| dir.gsub "packages/", "" }
+        packages = Dir["packages/*"].map { |dir| dir.gsub "packages/", "" }
         packages - reserved_packages
       end
     end
 
-    def select_package(selected_package = nil)
-      if available_packages.include?(selected_package)
+    def available_apps
+      @available_apps ||= available_packages.select { |pkg| pkg.ends_with? "_app" }
+    end
+
+    def available_features
+      @available_features ||= ["main_app"] + available_packages.select { |pkg| !pkg.ends_with?("_app") }
+    end
+
+    def select_package(selected_package = nil, msg: "Select package", pkgs: nil)
+      pkgs ||= available_packages
+      if pkgs.include?(selected_package)
         selected_package
       else
-        prompt.select("Select package", available_packages)
+        prompt.select(msg, pkgs)
       end
+    end
+
+    def select_app(selected_package = nil, msg: "Select app")
+      select_package(selected_package, msg: msg, pkgs: available_apps)
+    end
+
+    def select_feature(selected_package = nil, msg: "Select feature")
+      select_package(selected_package, msg: msg, pkgs: available_features)
     end
 
     def select_destination_package

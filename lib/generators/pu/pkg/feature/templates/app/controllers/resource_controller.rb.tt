@@ -1,0 +1,7 @@
+module <%= package_name %>
+  class ResourceController < ::ResourceController
+    include Plutonium::Core::FeatureController
+
+    boot <%= package_name %>
+  end
+end

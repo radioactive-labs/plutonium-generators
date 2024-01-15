@@ -17,9 +17,11 @@ module Pu
         validate_package_name package_name
 
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
-        create_file "packages/#{package_namespace}/app/controllers/#{package_namespace}/.keep"
+
+        %w[controllers interactions models policies presenters].each do |dir|
+          directory "app/#{dir}", "packages/#{package_namespace}/app/#{dir}/#{package_namespace}"
+        end
         create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
-        create_file "packages/#{name.underscore}/app/models/#{package_namespace}/.keep"
 
         insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e

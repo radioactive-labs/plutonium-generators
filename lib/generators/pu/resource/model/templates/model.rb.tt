@@ -1,9 +1,9 @@
-<% module_namespacing do -%>
 <% if class_path.last.present? -%>
 require_relative "../<%= class_path.last.underscore %>"
 
 <% end -%>
-class <%= class_name %> < ResourceRecord
+<% module_namespacing do -%>
+class <%= class_name %> < <%= package_name %>::ResourceRecord
   # pu:add concerns above.
 
   # pu:add model configurations above.

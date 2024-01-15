@@ -32,8 +32,12 @@ module Pu
       def name
         @pu_name ||= begin
           select_destination_package
-          [destination_main_app? ? nil : destination_package, super.underscore].compact.join "/"
+          @name = [destination_main_app? ? nil : destination_package, super.underscore].compact.join "/"
         end
+      end
+
+      def package_name
+        destination_package.classify
       end
     end
   end
