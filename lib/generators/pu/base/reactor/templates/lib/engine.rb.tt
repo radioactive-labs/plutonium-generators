@@ -1,0 +1,7 @@
+module Reactor
+  class Engine < Rails::Engine
+    include Plutonium::Package
+
+    # Include directives after this line
+  end
+end

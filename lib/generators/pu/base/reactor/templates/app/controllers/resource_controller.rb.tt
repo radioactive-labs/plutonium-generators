@@ -1,0 +1,2 @@
+class ResourceController < Plutonium::Core::ResourceController
+end

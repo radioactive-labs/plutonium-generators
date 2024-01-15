@@ -1,0 +1,3 @@
+class ResourcePresenter
+  include Plutonium::Core::ResourcePresenter
+end

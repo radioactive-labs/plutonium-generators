@@ -10,6 +10,11 @@ module PlutoniumGenerators
     module Actions
       protected
 
+      def validate_package_name(package_name)
+        reserved_packages = %w[core reactor]
+        error("Package name is reserved\n\n#{reserved_packages.join "\n"}") if reserved_packages.include?(package_name)
+      end
+
       #
       # Sets the ruby version for the project in .ruby-version and Gemfile to `PlutoniumGenerators::RUBY_VERSION`
       #

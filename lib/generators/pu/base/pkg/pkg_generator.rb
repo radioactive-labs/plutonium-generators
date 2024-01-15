@@ -12,17 +12,21 @@ module Pu
       desc "Create a plutonium package"
 
       argument :name
-      class_option :app, type: :boolean, desc: "Create the package as an app"
+      class_option :app, type: :boolean, desc: "Create the package as an app. Defaults to creating a feature."
 
       def start
+        validate_package_name package_name
+
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
         create_file "packages/#{package_namespace}/app/controllers/#{package_namespace}/.keep"
         create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
 
         if options[:app]
           template "config/routes.rb", "packages/#{package_namespace}/config/routes.rb"
+          # insert_into_file "config/routes.rb", "\n mount #{package_name}::Engine, at: \"/#{name.underscore}\"", before: /\n$end/
+          route "mount #{package_name}::Engine, at: \"/#{name.underscore}\""
         else
-          create_file "packages/#{package_namespace}/app/models/#{package_namespace}/.keep"
+          create_file "packages/#{name.underscore}/app/models/#{package_namespace}/.keep"
         end
 
         insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
@@ -33,9 +37,8 @@ module Pu
       private
 
       def package_name
-        suffix = options[:app] ? "_app" : ""
-        package_name = name.underscore + suffix
-        package_name.classify
+        suffix = options[:app] ? "App" : ""
+        name.classify + suffix
       end
 
       def package_namespace
@@ -43,7 +46,7 @@ module Pu
       end
 
       def package_type
-        options[:app] ? "App" : "Package"
+        options[:app] ? "App" : "Feature"
       end
     end
   end

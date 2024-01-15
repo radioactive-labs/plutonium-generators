@@ -1,0 +1,3 @@
+class ResourcePolicy
+  include Plutonium::Core::ResourcePolicy
+end
