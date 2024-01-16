@@ -16,6 +16,11 @@ module Pu
       def start
         validate_package_name package_name
 
+        if defined?(RodauthApp) && (rodauths = RodauthApp.opts[:rodauths].keys).present?
+          rodauth_account = prompt.select("Select rodauth account to authenticate with:", rodauths + [:none])
+          @rodauth_account = rodauth_account unless rodauth_account == :none
+        end
+
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
         template "config/routes.rb", "packages/#{package_namespace}/config/routes.rb"
 
@@ -30,6 +35,8 @@ module Pu
       end
 
       private
+
+      attr_reader :rodauth_account
 
       def package_name
         name.classify + "App"

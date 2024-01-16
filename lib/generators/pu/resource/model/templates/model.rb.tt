@@ -4,18 +4,18 @@ require_relative "../<%= class_path.last.underscore %>"
 <% end -%>
 <% module_namespacing do -%>
 class <%= class_name %> < <%= package_name %>::ResourceRecord
-  # pu:add concerns above.
+  # add concerns above.
 
-  # pu:add model configurations above.
+  # add model configurations above.
 
 <% attributes.select(&:reference?).each do |attribute| -%>
   belongs_to :<%= attribute.name %><%= ", polymorphic: true" if attribute.polymorphic? %>
 <% end -%>
-  # pu:add belongs_to associations above.
+  # add belongs_to associations above.
 
-  # pu:add has_one associations above.
+  # add has_one associations above.
 
-  # pu:add has_many associations above.
+  # add has_many associations above.
 
 <% attributes.select(&:attachment?).each do |attribute| -%>
   has_one_attached :<%= attribute.name %>
@@ -23,7 +23,7 @@ class <%= class_name %> < <%= package_name %>::ResourceRecord
 <% attributes.select(&:attachments?).each do |attribute| -%>
   has_many_attached :<%= attribute.name %>
 <% end -%>
-  # pu:add attachments above.
+  # add attachments above.
 
 <% attributes.select(&:rich_text?).each do |attribute| -%>
   has_rich_text :<%= attribute.name %>
@@ -34,16 +34,16 @@ class <%= class_name %> < <%= package_name %>::ResourceRecord
 <% if attributes.any?(&:password_digest?) -%>
   has_secure_password
 <% end -%>
-  # pu:add misc attribute macros above.
+  # add misc attribute macros above.
 
-  # pu:add scopes above.
+  # add scopes above.
 
-  # pu:add validations above.
+  # add validations above.
 
-  # pu:add callbacks above.
+  # add callbacks above.
 
-  # pu:add delegations above.
+  # add delegations above.
 
-  # pu:add methods above.
+  # add methods above.
 end
 <% end -%>

@@ -19,6 +19,9 @@ module Pu
       def start
         install_required_rails_version
         create_starter_project
+
+        invoke "pu:rodauth:install", []
+        invoke "pu:rodauth:account", ["admin"]
       rescue => e
         exception "#{self.class} failed:", e
       end
