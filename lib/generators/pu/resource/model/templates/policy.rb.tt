@@ -1,17 +1,4 @@
 <% module_namespacing do -%>
-class <%= class_name %>Policy < <%= package_name %>::ResourcePolicy
-  class Scope
-    include Plutonium::Policy::Scope
-
-    def resolve
-      scope = ::<%= class_name %>.all
-      if @context.parent.present?
-        scope = scope.for_parent(@context.parent)
-      elsif @context.scope.present?
-        scope = scope.where(@context.scope.attribute => @context.scope.record)
-      end
-      scope
-    end
-  end
+class <%= class_name %>Policy < <%= [feature_package_name, "ResourcePolicy"].join "::" %>
 end
 <% end -%>

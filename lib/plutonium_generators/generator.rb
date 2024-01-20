@@ -63,21 +63,6 @@ module PlutoniumGenerators
       select_package(selected_package, msg: msg, pkgs: available_features)
     end
 
-    def select_destination_package
-      @destination_package = select_package destination_package
-
-      self.destination_root = destination_main_app? ? nil : "packages/#{destination_package}"
-      destination_package
-    end
-
-    def destination_main_app?
-      destination_package == "main_app"
-    end
-
-    def destination_package
-      @destination_package || options[:package]
-    end
-
     # ####################
 
     def prompt

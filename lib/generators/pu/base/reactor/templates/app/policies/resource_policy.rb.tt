@@ -1,3 +1,2 @@
-class ResourcePolicy
-  include Plutonium::Core::ResourcePolicy
+class ResourcePolicy < Plutonium::Reactor::ResourcePolicy
 end

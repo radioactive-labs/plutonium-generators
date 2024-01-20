@@ -31,13 +31,21 @@ module Pu
 
       def name
         @pu_name ||= begin
-          select_destination_package
-          @name = [destination_main_app? ? nil : destination_package, super.underscore].compact.join "/"
+          @selected_feature = select_feature selected_feature
+          @name = [main_app? ? nil : feature_package_name, super.underscore].compact.join "/"
         end
       end
 
-      def package_name
-        destination_package.classify
+      def feature_package_name
+        main_app? ? nil : selected_feature.classify
+      end
+
+      def main_app?
+        selected_feature == "main_app"
+      end
+
+      def selected_feature
+        @selected_feature || options[:feature]
       end
     end
   end

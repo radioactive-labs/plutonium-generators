@@ -31,7 +31,7 @@ module Pu
       end
 
       def package_type
-        "Reactor"
+        "Reactor::Engine"
       end
     end
   end

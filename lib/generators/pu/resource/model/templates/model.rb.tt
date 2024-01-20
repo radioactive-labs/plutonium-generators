@@ -3,7 +3,7 @@ require_relative "../<%= class_path.last.underscore %>"
 
 <% end -%>
 <% module_namespacing do -%>
-class <%= class_name %> < <%= package_name %>::ResourceRecord
+class <%= class_name %> < <%= [feature_package_name, "ResourceRecord"].join "::" %>
   # add concerns above.
 
   # add model configurations above.

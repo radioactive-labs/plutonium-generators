@@ -1,3 +1,2 @@
-class ResourcePresenter
-  include Plutonium::Core::ResourcePresenter
+class ResourcePresenter < Plutonium::Reactor::ResourcePresenter
 end

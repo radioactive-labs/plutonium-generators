@@ -1,21 +1,4 @@
 <% module_namespacing do -%>
-class <%= class_name %>Presenter < <%= package_name %>::ResourcePresenter
-  private
-
-  def collection_fields
-    [:name]
-  end
-
-  def detail_fields
-    [:name]
-  end
-
-  def form_inputs
-    [:name]
-  end
-
-  def associations_list
-    []
-  end
+class <%= class_name %>Presenter < <%= [feature_package_name, "ResourcePresenter"].join "::" %>
 end
 <% end -%>

@@ -47,7 +47,7 @@ module Pu
       end
 
       def package_type
-        "App"
+        "Packaging::App"
       end
     end
   end

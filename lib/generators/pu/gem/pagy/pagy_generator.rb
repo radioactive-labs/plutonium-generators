@@ -16,7 +16,6 @@ module Pu
           run "bundle add pagy"
         end
 
-        generate "simple_form:install", []
         directory "config"
       rescue => e
         exception "#{self.class} failed:", e

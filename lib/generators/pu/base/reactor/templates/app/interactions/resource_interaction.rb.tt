@@ -1,3 +1,2 @@
-class ResourceInteraction < ActiveInteraction::Base
-  include Plutonium::Core::ResourceInteraction
+class ResourceInteraction < Plutonium::Reactor::ResourceInteraction
 end
