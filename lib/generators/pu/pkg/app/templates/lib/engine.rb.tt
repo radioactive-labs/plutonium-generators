@@ -3,8 +3,10 @@ module <%= package_name %>
     include Plutonium::<%= package_type %>
     # add concerns above.
 
-    # register resources above.
+    config.after_initialize do
+      # add directives above.
 
-    # add directives above.
+      # register resources above.
+    end
   end
 end
