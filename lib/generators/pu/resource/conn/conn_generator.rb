@@ -4,7 +4,7 @@ require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Resource
-    class CxnGenerator < Rails::Generators::Base
+    class ConnGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
       source_root File.expand_path("templates", __dir__)
@@ -30,7 +30,9 @@ module Pu
           template "app/policies/resource_policy.rb", "packages/#{package_namespace}/app/policies/#{package_namespace}/#{resource.underscore}_policy.rb"
           template "app/presenters/resource_presenter.rb", "packages/#{package_namespace}/app/presenters/#{package_namespace}/#{resource.underscore}_presenter.rb"
 
-          insert_into_file "packages/#{package_namespace}/lib/engine.rb", indent("register_resource \"#{resource}\"\n", 4), before: /.*# register resources above.*/
+          insert_into_file "packages/#{package_namespace}/lib/engine.rb",
+            indent("register_resource #{resource}\n", 6),
+            before: /.*# register resources above.*/
         end
       rescue => e
         exception "#{self.class} failed:", e
