@@ -4,12 +4,12 @@ require File.expand_path("../../../../plutonium_generators", __dir__)
 
 module Pu
   module Resource
-    class ConnectGenerator < Rails::Generators::Base
+    class CxnGenerator < Rails::Generators::Base
       include PlutoniumGenerators::Generator
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Connect resources to an app"
+      desc "Create a connection between a resource and an app"
 
       # argument :name
 
