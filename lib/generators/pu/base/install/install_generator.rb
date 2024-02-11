@@ -14,7 +14,7 @@ module Pu
       desc "Set up the base requirements for Plutonium"
 
       def start
-        gem "plutonium", path: "/Users/stefan/code/plutonium/starters/plutonium/"
+        gem "plutonium", github: "radioactive-labs/plutonium-core"
 
         setup_packaging_system
         install_required_gems
@@ -33,7 +33,7 @@ module Pu
       def install_required_gems
         invoke "pu:base:reactor"
         invoke "pu:gem:simple_form"
-        invoke "pu:gem:pagy"
+        # invoke "pu:gem:pagy"
         invoke "pu:gem:rabl"
       end
     end

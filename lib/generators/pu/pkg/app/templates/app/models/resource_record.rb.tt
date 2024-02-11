@@ -1,4 +1,5 @@
 module <%= package_name %>
-  module ResourceRecord
+  class ResourceRecord < ::ResourceRecord
+    self.abstract_class = true
   end
 end
