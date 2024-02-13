@@ -31,7 +31,7 @@ module Pu
           template "app/presenters/resource_presenter.rb", "packages/#{package_namespace}/app/presenters/#{package_namespace}/#{resource.underscore}_presenter.rb"
 
           insert_into_file "packages/#{package_namespace}/lib/engine.rb",
-            indent("register_resource #{resource}\n", 6),
+            indent("register_resource ::#{resource}\n", 6),
             before: /.*# register resources above.*/
         end
       rescue => e

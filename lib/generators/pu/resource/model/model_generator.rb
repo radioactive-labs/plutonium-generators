@@ -32,7 +32,9 @@ module Pu
       def name
         @pu_name ||= begin
           @selected_feature = select_feature selected_feature
-          @name = [main_app? ? nil : feature_package_name, super.underscore].compact.join "/"
+          @name = [main_app? ? nil : selected_feature.underscore, super.underscore].compact.join "/"
+          set_destination_root!
+          @name
         end
       end
 
@@ -46,6 +48,10 @@ module Pu
 
       def selected_feature
         @selected_feature || options[:feature]
+      end
+
+      def set_destination_root!
+        @destination_stack = [File.join(Rails.root, main_app? ? '' : "packages/#{selected_feature.underscore}")]
       end
     end
   end

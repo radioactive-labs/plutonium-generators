@@ -30,6 +30,7 @@ module Pu
       end
 
       def create_starter_project
+        # TODO: pass through options
         cmd = "rails _#{rails_version}_ new #{project_dir} --name=#{name} " \
               " --skip-action-mailbox --skip-action-text --skip-active-storage --skip-action-cable --skip-jbuilder" \
               " --skip-test --skip-system-test" \
