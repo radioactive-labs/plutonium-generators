@@ -32,7 +32,7 @@ module Pu
       def name
         @pu_name ||= begin
           @selected_feature = select_feature selected_feature
-          @name = [main_app? ? nil : selected_feature.underscore, super.underscore].compact.join "/"
+          @name = [main_app? ? nil : selected_feature.underscore, super.singularize.underscore].compact.join "/"
           set_destination_root!
           @name
         end
