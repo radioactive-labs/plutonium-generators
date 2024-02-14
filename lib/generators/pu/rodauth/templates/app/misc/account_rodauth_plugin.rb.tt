@@ -199,6 +199,9 @@ class <%= table_prefix.classify %>RodauthPlugin < RodauthPlugin
 
     # Extend user's remember period when remembered via a cookie
     extend_remember_deadline? true
+
+    # Store the user's remember cookie under a namespace
+    remember_cookie_key "_<%= table_prefix %>_remember"
 <% end -%>
 
     # ==> Hooks
