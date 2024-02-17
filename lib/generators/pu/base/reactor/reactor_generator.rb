@@ -14,8 +14,6 @@ module Pu
       def start
         template "lib/engine.rb", "packages/#{package_namespace}/lib/engine.rb"
         directory "app", "packages/#{package_namespace}/app"
-
-        insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e
         exception "#{self.class} failed:", e
       end

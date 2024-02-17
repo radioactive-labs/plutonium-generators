@@ -25,7 +25,7 @@ module Pu
       private
 
       def setup_packaging_system
-        create_file "config/packages.rb", skip: true
+        copy_file "config/packages.rb"
         insert_into_file "config/application.rb", "\nrequire_relative \"packages\"\n", after: /Bundler\.require.*\n/
         insert_into_file "config/application.rb", indent("Plutonium.configure_rails config\n\n", 4), after: /.*< Rails::Application\n/
       end

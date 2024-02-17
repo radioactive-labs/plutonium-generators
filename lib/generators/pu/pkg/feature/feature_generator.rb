@@ -22,8 +22,6 @@ module Pu
           directory "app/#{dir}", "packages/#{package_namespace}/app/#{dir}/#{package_namespace}"
         end
         create_file "packages/#{package_namespace}/app/views/#{package_namespace}/.keep"
-
-        insert_into_file "config/packages.rb", "require_relative \"../packages/#{package_namespace}/lib/engine\"\n"
       rescue => e
         exception "#{self.class} failed:", e
       end
