@@ -38,6 +38,10 @@ class <%= class_name %> < <%= [feature_package_name, "ResourceRecord"].join "::"
 
   # add scopes above.
 
+<% attributes.select(&:required?).each do |attribute| -%>
+  <%- next if attribute.reference? || attribute.rich_text? || attribute.token? || attribute.password_digest? -%>
+  validates :<%= attribute.name %>, presence: true
+<% end -%>
   # add validations above.
 
   # add callbacks above.

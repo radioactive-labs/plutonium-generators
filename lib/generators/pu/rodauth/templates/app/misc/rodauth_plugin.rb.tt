@@ -50,7 +50,7 @@ class RodauthPlugin < Rodauth::Rails::Auth
     # Store account status in an integer column without foreign key constraint.
     account_status_column :status
 
-    # Set password when creating account instead of when verifying.
+    # Set password when verifying account.
     # verify_account_set_password? false
 
     # Change some default param keys/labels.

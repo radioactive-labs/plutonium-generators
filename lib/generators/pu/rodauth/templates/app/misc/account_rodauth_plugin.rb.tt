@@ -35,7 +35,7 @@ class <%= table_prefix.classify %>RodauthPlugin < RodauthPlugin
     rails_controller { Rodauth::<%= "#{table_prefix.classify}" %>Controller }
 <% if verify_account? -%>
 
-    # Set password when creating account instead of when verifying.
+    # Set password when verifying account.
     verify_account_set_password? false
 <% end -%>
 
