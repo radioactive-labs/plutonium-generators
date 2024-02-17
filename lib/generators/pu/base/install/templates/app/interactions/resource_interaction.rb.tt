@@ -1,2 +1,0 @@
-class ResourceInteraction < Plutonium::Reactor::ResourceInteraction
-end

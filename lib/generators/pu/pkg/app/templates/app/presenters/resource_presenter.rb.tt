@@ -1,4 +1,0 @@
-module <%= package_name %>
-  module ResourcePresenter
-  end
-end

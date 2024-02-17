@@ -1,3 +1,0 @@
-class <%= app_namespace %>::<%= resource_class %>Policy < ::<%= resource_class %>Policy
-  include <%= app_namespace %>::ResourcePolicy
-end

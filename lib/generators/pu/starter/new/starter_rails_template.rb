@@ -2,10 +2,6 @@ def commit_changes(msg)
   git add: ".", commit: "-m '#{msg}'"
 end
 
-gem_group :development, :test do
-  gem "plutonium_generators", github: "radioactive-labs/plutonium-generators"
-end
-
 after_bundle do
   commit_changes "initial commit"
 

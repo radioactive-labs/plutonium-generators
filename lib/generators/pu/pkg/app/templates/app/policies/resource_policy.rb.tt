@@ -1,4 +1,0 @@
-module <%= package_name %>
-  module ResourcePolicy
-  end
-end

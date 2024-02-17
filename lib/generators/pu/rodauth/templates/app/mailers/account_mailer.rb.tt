@@ -1,4 +1,0 @@
-module Rodauth
-  class <%= table_prefix.classify %>Mailer < RodauthMailer
-  end
-end

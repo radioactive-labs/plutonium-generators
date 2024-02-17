@@ -1,4 +1,0 @@
-module <%= package_name %>
-  class ResourcePresenter < ::ResourcePresenter
-  end
-end

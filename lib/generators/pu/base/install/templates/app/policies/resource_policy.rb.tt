@@ -1,2 +1,0 @@
-class ResourcePolicy < Plutonium::Reactor::ResourcePolicy
-end
