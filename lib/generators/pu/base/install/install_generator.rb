@@ -18,6 +18,8 @@ module Pu
 
         setup_packaging_system
         install_required_gems
+
+        directory "app"
       rescue => e
         exception "#{self.class} failed:", e
       end
@@ -31,7 +33,6 @@ module Pu
       end
 
       def install_required_gems
-        invoke "pu:base:reactor"
         invoke "pu:gem:simple_form"
         # invoke "pu:gem:pagy"
         invoke "pu:gem:rabl"
