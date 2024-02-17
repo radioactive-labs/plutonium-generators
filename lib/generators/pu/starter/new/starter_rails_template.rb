@@ -8,8 +8,8 @@ after_bundle do
   generate "pu:setup:rails"
   commit_changes "setup rails"
 
-  generate "pu:base:install"
-  commit_changes "setup plutonium base"
+  generate "pu:core:install"
+  commit_changes "setup plutonium core"
 
   generate "pu:rodauth:install"
   commit_changes "install rodauth"
